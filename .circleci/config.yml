@@ -51,7 +51,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-#            pytest -s -v --cov
+            pytest -s -v --cov
 
        # report test data
       - run:

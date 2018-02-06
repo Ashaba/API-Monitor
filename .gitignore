@@ -9,7 +9,7 @@ __pycache__/
 *.so
 
 .idea
-
+.DS_Store
 .env
 
 .pytest_cache

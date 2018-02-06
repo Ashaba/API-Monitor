@@ -13,11 +13,10 @@ os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def create_application(environment):
-	app = Flask(__name__, instance_relative_config=True, static_folder=None)
+	app = Flask(__name__, instance_relative_config=True, static_folder="application/static")
 	app.config.from_object(app_configuration[environment])
 	app.register_blueprint(app_view)
 	app.register_blueprint(auth)
-	
 	# initialize SQLAlchemy
 	models.db.init_app(app)
 	

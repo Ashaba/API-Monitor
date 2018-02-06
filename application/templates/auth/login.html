@@ -1,12 +1,8 @@
-{#<!DOCTYPE html>#}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="google-signin-client_id" content="886619612646-k71mgp1dgo6pb3ph0s5i31gv7oj03ee7.apps.googleusercontent.com">
-    <title>Login</title>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-</head>
+<html>
+{% extends "base.html" %}
+
 <body>
+{% block body %}
 <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
 <script>
       function onSignIn(googleUser) {
@@ -24,6 +20,7 @@
         console.log("ID Token: " + id_token);
         window.location = "/dashboard";
       }
-    </script>
+</script>
+{% endblock %}
 </body>
 </html>

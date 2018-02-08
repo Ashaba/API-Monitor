@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+<body>
+{% block body %}
+    <main role="main" class="container">
+      <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="lh-100">
+          <h6 class="mb-0 text-white lh-100">API Monitor</h6>
+          <small>V1.0</small>
+        </div>
+      </div>
+
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+          <div class="row">
+              <div class="col-sm-8">
+
+              </div>
+              <div class="col-sm-4">
+                  <h6 class="border-bottom border-gray pb-2 mb-0">Add Team</h6>
+                  <form id="form-team" method="post" action="#">
+                      <div class="form-group">
+                          <label for="teamName">Name</label>
+                          <input type="text" name="team" class="form-control" id="team">
+                      </div>
+                      <button type="submit" class="btn btn-secondary btn-sm">Save</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Requests</h6>
+        <div id="requests" class="media text-muted pt-3">
+          <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <strong id="urlPlaceholder" class="text-gray-dark"></strong>
+              <a id="statusPlaceholder" href="#"></a>
+            </div>
+            <span id="bodyPlaceholder" class="d-block"></span>
+          </div>
+        </div>
+        <small class="d-block text-right mt-3">
+          <a href="#">All collections</a>
+        </small>
+      </div>
+    </main>
+    <script>
+    $("#form-team").submit(function (event) {
+        event.preventDefault();
+        var form_data = $(this).serializeArray();
+        $.ajax({
+            type: 'POST',
+            url: '/team',
+            data: form_data,
+            success: function(response) {
+                window.location.reload(true);
+            }
+        });
+    });
+    </script>
+{% endblock %}
+</body>

@@ -13,17 +13,7 @@ def dashboard():
     context["title"] = "Dashboard"
     if request.method == 'POST':
         payload = request.get_json()
-        if payload:
-            if payload['method'] == 'get':
-                response = requests.get(payload['url'], headers=payload['headers'])
-                values = []
-                data = {
-                    "statusCode": response.status_code,
-                    "body": response.content.decode("utf-8"),
-                    "url": response.url,
-                }
-                values.append(data)
-                return jsonify(dict(status="success", data=data))
+        return('success')
     return render_template("dashboard.html", context=context)
 
 

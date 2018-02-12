@@ -1,0 +1,185 @@
+:root {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.8rem;
+}
+
+/* Dashboard */
+
+
+#checks {
+    background: white;
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: 0.6rem;
+    box-shadow: 0 0 1.5rem rgba(0,0,0,0.3);
+}
+
+#checks .header, #addCheck {
+    margin: 0 2rem;
+}
+
+#checks .header .title {
+    color: #83878c;
+}
+
+#checks .header .menu {
+    display: inline-block;
+}
+
+#checks .header .menu .save {
+    border: none;
+    padding: 0;
+}
+
+#checks .header .menu .run-checks {
+    font-size: 1.3rem;
+    border: #e0dcdc 0.1rem solid;
+    padding: 0.5rem 1rem;
+    color: #83878c;
+    border-radius: 0.4rem;
+}
+
+#checks .header .menu .run-checks:hover {
+    cursor: pointer;
+    color: #414244;
+    border-color: #83878c;
+}
+
+#checks .header .menu svg {
+    margin-left: 2rem;
+    opacity: 0.5;
+    font-size: 1.5rem;
+}
+
+#checks .header .menu svg:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+#checks .footer {
+    margin-left: 2rem;
+}
+
+#checkTemplate {
+    display: none;
+}
+
+.check {
+    margin: 2rem;
+    padding: 1rem;
+    border: 0.1rem #e6e6e6 dashed;
+    position: relative;
+}
+
+.check .removeCheck {
+    position: absolute;
+    font-size: 1.3rem;
+    right: 2rem;
+    top: 2rem;
+    opacity: 0.3;
+}
+
+.check .removeCheck:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.check .nav-link {
+    font-size: 1.3rem;
+}
+
+.check .nav-link.active {
+    color: #17177b;
+}
+
+.check .tab-pane {
+    padding: 0 1rem;
+}
+
+.tab-pane-heading {
+    color: #6c757d;
+    font-size: 1rem;
+    display: block;
+    margin: 1.5rem 0 1rem 0;
+}
+
+.tab-pane-heading ~ .tab-pane-heading{
+    margin-top: 2rem;
+}
+
+.check .url-input {
+    margin-left: 1rem;
+    width: 50rem;
+}
+
+#header {
+    display: none;
+}
+
+.check .headers input {
+    width: 28rem;
+    margin-bottom: 0.5rem;
+}
+
+.check .headers input ~ input {
+    margin-left: 1rem;
+}
+
+.check .remove-header {
+    color: #919da9;
+    margin-left: 1.5rem;
+    display: inline-block;
+    padding-bottom: 1rem;
+    font-weight: bold;
+    font-size: 2rem;
+    opacity: 0.3;
+}
+
+.check .remove-header:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.add-button {
+    color: #027bff;
+    font-size: 1rem;
+    margin-top: 1rem;
+    display: block;
+}
+
+.add-button:hover {
+    cursor: pointer;
+    color: #0250a5;
+}
+
+.check .assertions .assertion {
+    margin-bottom: 1rem;
+}
+
+.check .assertions .headings span {
+    font-size: 1rem;
+    margin-top: 1.5rem;
+}
+
+.check .assertions span, .check .assertions .assertion .assertion-value, .remove-assertion {
+    display: inline-block;
+    color: #919da9;
+    width: 20%;
+    margin-right: 1rem;
+}
+
+.remove-assertion {
+    opacity: 0.3;
+}
+
+.remove-assertion:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+#assertion0 .remove-assertion {
+    display: none;
+}

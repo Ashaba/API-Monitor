@@ -3,18 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="google-signin-client_id" content="886619612646-k71mgp1dgo6pb3ph0s5i31gv7oj03ee7.apps.googleusercontent.com">
-    <title>Login</title>
+    <title>{{ context["title"] }}</title>
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename = "bootstrap/css/bootstrap.css") }}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename = "css/offcanvas.css") }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename = "js/jquery-3.3.1.min.js") }}" ></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body class="bg-light">
+{% block nav %}
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">API Monitor</a>
+      <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('app_view.dashboard') }}">Dashboard <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('app_view.collections') }}">Collections</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('app_view.team') }}">Team</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#" id="dropdown01">Settings</a>
+          </li>
+        </ul>
+          <a href="" class="my-2 my-lg-0">{{ session.name }}</a>&nbsp;&nbsp;&nbsp;
+          <a class="my-2 my-lg-0" href="#" onclick="signOut();">Sign out</a>
+      </div>
+    </nav>
+{% endblock %}
 {% block body %}
 
 
 {% endblock %}
-
+<script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();auth2.signOut().then(function () {
+            console.log('User signed out.');
+        });
+    }
+    function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
+</script>
+<script src="{{ url_for('static', filename = "js/popper.js") }}" ></script>
+<script src="{{ url_for('static', filename = "bootstrap/js/bootstrap.js") }}" ></script>
 </body>
 </html>

@@ -1,15 +1,22 @@
 import os
-from os.path import dirname
+from os.path import dirname, join
+from dotenv import load_dotenv
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+secret_key = os.urandom(24)
 
 
 class Config(object):
     BASE_DIR = dirname(__file__)
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PAGE_LIMIT = 10
     DEFAULT_PAGE = 1
+
+    # Secret key for signing cookies
+    SECRET_KEY = os.getenv('SECRET_KEY', secret_key)
 
     # email server
     MAIL_SERVER = 'smtp.gmail.com'
@@ -21,6 +28,7 @@ class Config(object):
 
 
 class ConfigWithCustomDBEngineParams(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     try:
         SQLALCHEMY_POOL_SIZE, SQLALCHEMY_MAX_OVERFLOW, SQLALCHEMY_POOL_TIMEOUT\
             = int(os.environ.get('SQLALCHEMY_POOL_SIZE')),\
@@ -32,6 +40,7 @@ class ConfigWithCustomDBEngineParams(Config):
 
 
 class DevelopmentConfiguration(ConfigWithCustomDBEngineParams):
+    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     DEBUG = True
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True

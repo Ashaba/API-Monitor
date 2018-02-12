@@ -1,35 +1,10 @@
-from flask_sqlalchemy import SQLAlchemy
-
-
-db = SQLAlchemy()
+from application.base_model import Base, db
 
 # many to many relationship between users and teams
 team_members = db.Table(
 	'team_members',
 	db.Column('user_id', db.Integer, db.ForeignKey('User.id'), nullable=False),
 	db.Column('team_id', db.Integer, db.ForeignKey('Team.id'), nullable=False))
-
-
-class Base(db.Model):
-	__abstract__ = True
-	id = db.Column(db.Integer, primary_key=True)
-	date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-	date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
-
-
-class User(Base):
-	"""
-	User model
-	"""
-	__tablename__ = 'User'
-	__table_args__ = {'extend_existing': True}
-	
-	name = db.Column(db.String(250), nullable=False)
-	email = db.Column(db.String(250), unique=True)
-	image_url = db.Column(db.String(), nullable=False)
-	collections = db.relationship(
-		'Collection', backref='owner', lazy='dynamic'
-	)
 
 
 class Collection(Base):
@@ -40,7 +15,11 @@ class Collection(Base):
 	__table_args__ = {'extend_existing': True}
 	
 	name = db.Column(db.String(128), nullable=False)
-	user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
+	team_id = db.Column(db.Integer, db.ForeignKey('Team.id'))
+	
+	def __str__(self):
+		return self.name
 
 
 class Team(Base):
@@ -51,6 +30,9 @@ class Team(Base):
 	__table_args__ = {'extend_existing': True}
 	name = db.Column(db.String(128), nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+	
+	def __str__(self):
+		return self.name
 	
 
 class Request(Base):

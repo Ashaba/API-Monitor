@@ -3,35 +3,48 @@ $('#submitForms').click(function () {
     $('.form').each(function (index, value) {
         var form = $(this),
             check = {};
+
+        if(form.is(':hidden')) {
+            return;
+        }
+
+        const list_entries = {
+            headerKeys: [],
+            headerValues: [],
+            assertionSources: [],
+            assertionComparisons: [],
+            assertionTargetValues: []
+        };
+
         form.find('[name]').each(function (index1, value1) {
-            if (index == 0) {
-                return;
-            }
             var field = $(this),
                 name = field.attr('name'),
-                value = field.val();
-            if (name in check) {
-                if (check[name].constructor === Array) {
-                    check[name].push(value);
-                } else {
-                    const tempValue = check[name];
-                    check[name] = [tempValue, value];
-                }
+                value = field.val(),
+                plural_name = name + 's';
+
+            if (plural_name in list_entries) {
+                list_entries[plural_name].push(value);
             } else {
                 check[name] = value;
             }
         });
+
+        $.extend(check, list_entries);
         data.push(check);
     });
-    $.ajax({
-        url: 'http://127.0.0.1:5000/dashboard',
-        type: 'POST',
-        data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-            console.log("here", response);
-        }
-    });
+
+    if(data.length > 0) {
+        $.ajax({
+            url: '/dashboard',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                
+            }
+        });
+    }
+
 });
 
 var headerIndex = 0;

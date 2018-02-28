@@ -25,6 +25,19 @@ body {
     box-shadow: 0 0 1.5rem rgba(0,0,0,0.3);
 }
 
+.header {
+    overflow: hidden;
+    color: #83878c;
+}
+
+.checksTitle {
+    float: left;
+}
+
+#submitForms {
+    margin-right: 2rem;
+}
+
 #checks .header, #addCheck {
     margin: 0 2rem;
 }
@@ -34,23 +47,19 @@ body {
 }
 
 #checks .header .menu {
-    display: inline-block;
+    float: right;
 }
 
-#checks .header .menu .save {
-    border: none;
-    padding: 0;
-}
-
-#checks .header .menu .run-checks {
+#checks .header .menu #runChecks, #submitForms {
     font-size: 1.3rem;
     border: #e0dcdc 0.1rem solid;
     padding: 0.5rem 1rem;
     color: #83878c;
     border-radius: 0.4rem;
+    display: inline-block;
 }
 
-#checks .header .menu .run-checks:hover {
+#checks .header .menu #runChecks:hover, #submitForms:hover {
     cursor: pointer;
     color: #414244;
     border-color: #83878c;

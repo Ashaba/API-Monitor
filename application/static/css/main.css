@@ -3,7 +3,7 @@
 }
 
 body {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
 }
 
 /* Login */
@@ -105,7 +105,7 @@ body {
 }
 
 .check .nav-link {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
 }
 
 .check .nav-link.active {
@@ -118,7 +118,7 @@ body {
 
 .tab-pane-heading {
     color: #6c757d;
-    font-size: 1rem;
+    font-size: 1.2rem;
     display: block;
     margin: 1.5rem 0 1rem 0;
 }
@@ -151,7 +151,7 @@ body {
     display: inline-block;
     padding-bottom: 1rem;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.3rem;
     opacity: 0.3;
 }
 
@@ -162,9 +162,10 @@ body {
 
 .add-button {
     color: #027bff;
-    font-size: 1rem;
+    font-size: 1.4rem;
     margin-top: 1rem;
     display: block;
+    width: 11rem;
 }
 
 .add-button:hover {
@@ -172,13 +173,21 @@ body {
     color: #0250a5;
 }
 
+.form-control {
+    height: 2.6rem !important;
+    line-height: 2.6rem;
+    font-size: 1.2rem;
+    border-radius: 0.4rem;
+}
+
 .check .assertions .assertion {
     margin-bottom: 1rem;
 }
 
 .check .assertions .headings span {
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin-top: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .check .assertions span, .check .assertions .assertion .assertion-value, .remove-assertion {
@@ -190,6 +199,7 @@ body {
 
 .remove-assertion {
     opacity: 0.3;
+    font-size: 1.3rem;
 }
 
 .remove-assertion:hover {

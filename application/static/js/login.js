@@ -1,8 +1,5 @@
 function onSignIn(googleUser) {
-    // Useful data for your client-side scripts:
     var profile = googleUser.getBasicProfile();
-    // The ID token you need to pass to your backend:
-    var id_token = googleUser.getAuthResponse().id_token;
     userDetails = {
         "ID": profile.getId(),
         "fullName": profile.getName(),
@@ -15,13 +12,26 @@ function onSignIn(googleUser) {
     $.ajax({
         type: 'POST',
         url: '/auth',
-        dataType: 'json',
+        data: JSON.stringify(userDetails),
         contentType: "application/json; charset=utf-8",
-        headers: {
-            'Authorization': id_token
-        },
-        success: function (data) {
+        success: function () {
             window.location.href = "/dashboard"
+        },
+        error: function (data) {
+            console.log(data);
         }
     });
 }
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+        window.location.href = "/"
+    });
+}
+
+$(function() {
+    gapi.load('auth2', function () {
+        gapi.auth2.init();
+    });
+});

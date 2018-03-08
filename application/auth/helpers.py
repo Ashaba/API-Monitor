@@ -1,5 +1,5 @@
 import logging
-from flask import request, jsonify, g, session
+from flask import request, jsonify, redirect, session
 from application.auth.models import User
 from functools import wraps
 from os import makedirs
@@ -28,31 +28,29 @@ NO_TOKEN_MSG = (
 SERVER_ERROR_MSG = 'Authorization failed. Please contact support.'
 
 
-def save_user():
-    user = User.query.filter_by(email=session.get("email")).first()
+def save_user(payload):
+    user = User.query.filter_by(email=payload.get("email")).first()
     if not user:
         user = User(
-            name=session.get("name"),
-            email=session.get("email"),
-            image_url=session.get("image_url")
+            name=payload.get("fullName"),
+            email=payload.get("email"),
+            image_url=payload.get("imageUrl")
         )
         user.save()
     return user
 
 
-def update_user(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        user = User.query.filter_by(email=session.get("email")).first()
-        if user:
-            if user.image_url != session.get("image_url"):
-                setattr(user, 'image_url', session.get("image_url"))
-            if user.name != session.get("name"):
-                setattr(user, 'name', session.get("name"))
-            user.save()
-        save_user()
-        return f(*args, **kwargs)
-    return decorated
+def update_user(payload):
+    user = User.query.filter_by(email=payload.get("email")).first()
+    if user:
+        if user.image_url != payload.get("imageUrl"):
+            setattr(user, 'image_url', payload.get("imageUrl"))
+        if user.name != payload.get("fullName"):
+            setattr(user, 'name', session.get("fullName"))
+        user.save()
+        return user
+    else:
+        save_user(payload)
     
 
 def verify_token(token):
@@ -68,15 +66,10 @@ def verify_token(token):
 
 
 def current_user():
-    try:
-        user = User.query.filter_by(email="jnashaba4@gmail.com").first()
-        # user = User.query.filter_by(email=session.get("email")).first()
-        if user:
-            return user
-        return None
-    except Exception as e:
-        print(e)
-        return None
+    user = User.query.filter_by(email=session.get("email")).first()
+    if user:
+        return user
+    return None
 
     
 # authorization decorator
@@ -104,5 +97,14 @@ def token_required(f):
         session['name'] = user["name"]
         session['email'] = user["email"]
         session['image_url'] = user["picture"]
+        return f(*args, **kwargs)
+    return decorated
+
+
+def authentication_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get("name"):
+            return redirect("/", code=302)
         return f(*args, **kwargs)
     return decorated

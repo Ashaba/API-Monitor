@@ -1,13 +1,13 @@
-from flask import Blueprint, render_template, request, jsonify
-import requests
+from flask import Blueprint, render_template, request
 
-from application.auth.helpers import (current_user)
+from application.auth.helpers import (current_user, authentication_required)
 from application.models import Team, Collection
 
 app_view = Blueprint('app_view', __name__, template_folder='templates')
 
 
 @app_view.route('/dashboard', methods=['POST', 'GET'])
+@authentication_required
 def dashboard():
     context = dict()
     context["title"] = "Dashboard"
@@ -18,6 +18,7 @@ def dashboard():
 
 
 @app_view.route('/team', methods=['POST', 'GET'])
+@authentication_required
 def team():
     context = dict()
     context["title"] = "Team"
@@ -28,6 +29,7 @@ def team():
 
 
 @app_view.route('/collections', methods=['POST', 'GET'])
+@authentication_required
 def collections():
     context = dict()
     context["teams"] = Team.fetch_all()
@@ -38,4 +40,3 @@ def collections():
         collection = Collection(name=name, user_id=current_user().id, team_id=team_id)
         collection.save()
     return render_template('collections.html', context=context)
-

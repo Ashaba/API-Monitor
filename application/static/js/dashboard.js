@@ -50,18 +50,18 @@ $("#addCheck").click(function () {
         var clone = $("#header").clone().attr('id', 'header' + headerIndex);
         clone.children('.remove-header').click(function () {
             $(this).parent().remove();
-        })
+        });
         clone.appendTo(headersBox);
         headerIndex++;
     });
     assertionsPane.attr('id', 'assertions' + checkIndex);
-    var assertionsBox = assertionsPane.children('#assertions-box')
+    var assertionsBox = assertionsPane.children('#assertions-box');
     assertionsBox.attr('id', 'assertions' + checkIndex);
     assertionsPane.children(".add-button").click(function () {
         var clone = $("#assertion0").clone().attr('id', 'assertion' + assertionIndex);
         clone.children('.remove-assertion').click(function () {
             $(this).parent().remove();
-        })
+        });
         clone.appendTo(assertionsBox);
         assertionIndex++;
     });
@@ -70,7 +70,7 @@ $("#addCheck").click(function () {
     $(navTabs[1]).attr('href', '#assertions' + checkIndex);
     clone.children('.removeCheck').click(function () {
         $(this).parent().remove();
-    })
+    });
     clone.appendTo("#checksFormContainer");
     checkIndex++;
 });

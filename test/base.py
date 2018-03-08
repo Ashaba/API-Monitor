@@ -3,6 +3,12 @@ from flask_testing import TestCase
 from application.models import db
 from main import create_application
 
+user_payload = {
+	"fullName": "Test User",
+	"email": "testuser@gmail.com",
+	"imageUrl": "image_random"
+}
+
 
 class BaseTestCase(TestCase):
 

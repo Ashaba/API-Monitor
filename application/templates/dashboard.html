@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% from 'banner.html' import banner %}
 
 <body>
   {% block body %}
 
   <main role="main" class="container">
-    <div id="checks">
+    {{ banner() }}
+    <div id="checks" class="container-box">
       <div class="header">
         <div class="checksTitle">
           <span class="title">CHECKS</span>

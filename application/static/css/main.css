@@ -6,6 +6,10 @@ body {
     font-size: 1.6rem;
 }
 
+.container {
+    margin-top: 44px;
+}
+
 /* Login */
 .g-signin2 {
     display: flex;
@@ -17,10 +21,10 @@ body {
 /* Dashboard */
 
 
-#checks {
+.container-box {
     background: white;
     padding: 2rem;
-    margin: 3rem 0;
+    margin-bottom: 2rem;
     border-radius: 0.6rem;
     box-shadow: 0 0 1.5rem rgba(0,0,0,0.3);
 }

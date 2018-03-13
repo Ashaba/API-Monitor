@@ -84,10 +84,6 @@ body {
     margin-left: 2rem;
 }
 
-#checkTemplate {
-    display: none;
-}
-
 .check {
     margin: 2rem;
     padding: 1rem;
@@ -164,7 +160,7 @@ body {
     opacity: 1;
 }
 
-.add-button {
+#addCheck, .addHeader, .addAssertion {
     color: #027bff;
     font-size: 1.4rem;
     margin-top: 1rem;
@@ -172,7 +168,7 @@ body {
     width: 11rem;
 }
 
-.add-button:hover {
+#addCheck:hover, .addHeader:hover, .addAssertion:hover {
     cursor: pointer;
     color: #0250a5;
 }
@@ -194,16 +190,30 @@ body {
     margin-bottom: 1rem;
 }
 
-.check .assertions span, .check .assertions .assertion .assertion-value, .remove-assertion {
+.check .assertions span, .check .assertions .assertion .assertion-value {
     display: inline-block;
     color: #919da9;
     width: 20%;
     margin-right: 1rem;
 }
 
+.removeHeader {
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    margin-left: 1.8rem;
+    color: #919da9;
+    opacity: 0.7;
+}
+
+.removeHeader:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
 .remove-assertion {
-    opacity: 0.3;
-    font-size: 1.3rem;
+    opacity: 0.7;
+    font-size: 1.6rem;
+    color: #919da9;
 }
 
 .remove-assertion:hover {

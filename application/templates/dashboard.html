@@ -25,66 +25,6 @@
       <span class="add-button" id="addCheck">+ Add check</span>
     </div>
 
-    <div class="check" id="checkTemplate">
-      <span class="removeCheck">
-        <i class="fas fa-times"></i>
-      </span>
-      <nav class="nav" role="tablist">
-        <a class="nav-link active" data-toggle="tab" href="#request" role="tab">Request</a>
-        <a class="nav-link" data-toggle="tab" href="#assertions" role="tab">Assertions</a>
-      </nav>
-      <form class="form">
-        <div class="tab-content">
-          <div class="tab-pane active" id="request" role="tabpanel">
-            <span class="tab-pane-heading">ENDPOINT</span>
-            <div class="form-inline requestForm">
-              <select name="method" class="form-control">
-                <option>GET</option>
-                <option>POST</option>
-                <option>PUT</option>
-                <option>DELETE</option>
-              </select>
-              <input name="url" type="text" class="form-control url-input" placeholder="URL">
-            </div>
-            <span class="tab-pane-heading">HEADERS</span>
-            <div class="headers" id="headers">
-
-            </div>
-            <span class="add-button">+ Add header</span>
-          </div>
-          <div class="tab-pane" id="assertions" role="tabpanel">
-            <div class="assertions" id="assertions-box">
-              <div class="headings">
-                <span>SOURCE</span>
-                <span>COMPARISON</span>
-                <span>TARGET VALUE</span>
-              </div>
-              <div class="assertion" id="assertion0">
-                <select name="assertionSource" class="form-control assertion-value">
-                  <option>Status Code</option>
-                  <option>Response Time (ms)</option>
-                </select>
-                <select name="assertionComparison" class="form-control assertion-value">
-                  <option>equal (number)</option>
-                  <option>less than</option>
-                  <option>less than or equal to</option>
-                  <option>greater than</option>
-                  <option>greater than or equal to</option>
-                </select>
-                <input name="assertionTargetValue" type="text" class="form-control assertion-value" id="targetValue" placeholder="Enter value">
-                <span class="remove-assertion"><i class="fas fa-times"></i></span>
-              </div>
-            </div>
-            <span class="add-button">+ Add assertion</span>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="form-inline" id="header">
-      <input name="headerKey" type="text" class="form-control" placeholder="KEY">
-      <input name="headerValue" type="text" class="form-control" placeholder="VALUE">
-      <span class="remove-header"><i class="fas fa-times"></i></span>
-    </div>
   </main>
   <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script> {% endblock %}
 

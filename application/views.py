@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, jsonify
 
 from application.auth.helpers import (current_user, authentication_required)
-from application.models import Team, Collection
+from application.models import Team, Collection, Request
+from application.helpers import (run_collection_checks)
 
 app_view = Blueprint('app_view', __name__, template_folder='templates')
 
@@ -13,12 +14,25 @@ def dashboard():
     context["title"] = "Dashboard"
     if request.method == 'POST':
         payload = request.get_json()
-        response = jsonify(dict(
-            status="success",
-            message="successfully saved request(s)"
-        ))
-        response.status_code = 200
-        return response
+        
+        def handle_request(n):
+            if n < 1:
+                return "no data"
+            else:
+                n -= 1
+                req = Request(
+                    collection_id=2,
+                    method=payload[n].get("method"),
+                    body=payload[n].get("body"),
+                    url=payload[n].get("url"),
+                    headers=payload[n].get("headerKeys")
+                )
+                req.save()
+                # collection = payload[n].get("collection")
+                run_collection_checks(2)
+                return handle_request(n)
+        return handle_request(len(payload))
+
     return render_template("dashboard.html", context=context)
 
 

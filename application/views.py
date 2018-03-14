@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 
 from application.auth.helpers import (current_user, authentication_required)
 from application.models import Team, Collection
@@ -13,7 +13,12 @@ def dashboard():
     context["title"] = "Dashboard"
     if request.method == 'POST':
         payload = request.get_json()
-        return('success')
+        response = jsonify(dict(
+            status="success",
+            message="successfully saved request(s)"
+        ))
+        response.status_code = 200
+        return response
     return render_template("dashboard.html", context=context)
 
 

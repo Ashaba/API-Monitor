@@ -104,7 +104,7 @@ def token_required(f):
 def authentication_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if not session.get("name"):
+        if not session.get("email"):
             return redirect("/", code=302)
         return f(*args, **kwargs)
     return decorated

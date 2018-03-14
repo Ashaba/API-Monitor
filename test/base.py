@@ -9,6 +9,12 @@ user_payload = {
 	"imageUrl": "image_random"
 }
 
+request_payload = {
+	"url": "",
+	"method": "GET",
+	"headers": {"Authorization": "token", "XHTTP-Method": "POST"}
+}
+
 
 class BaseTestCase(TestCase):
 

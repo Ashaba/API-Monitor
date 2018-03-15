@@ -4,7 +4,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
 
 from application.base_model import db
-from application.models import Collection
+from application.models import Collection, Team, Request, Response, team_members
 from application.auth.models import User
 from main import create_application
 
@@ -29,7 +29,7 @@ def shell_command():
 
     """
 	models = [
-		User, Collection
+		User, Collection, Team, Request, Response, team_members
 	]
 	zipped_models = zip(models, models)
 	return dict(zipped_models)

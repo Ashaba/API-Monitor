@@ -81,7 +81,7 @@ class Base(db.Model):
     @classmethod
     def filter_all(cls, **kwargs):
         """Query and filter the data of the model."""
-        return cls.query.filter(**kwargs).all()
+        return cls.query.filter_by(**kwargs).all()
 
     @classmethod
     def filter_by(cls, **kwargs):

@@ -57,7 +57,7 @@ def team():
     return render_template("team.html", context=context)
 
 
-@app_view.route('/collections', methods=['POST', 'GET'])
+@app_view.route('/collections', methods=['POST', 'GET', 'DELETE'])
 @authentication_required
 def collections():
     context = dict()
@@ -65,7 +65,15 @@ def collections():
     context["title"] = "Collections"
     if request.method == 'POST':
         name = request.form["collection"]
-        team_id = request.form["team"]
+        team_id = request.form["team"] if request.form["team"] != 'none' else None 
         collection = Collection(name=name, user_id=current_user().id, team_id=team_id)
         collection.save()
+
+    elif request.method == 'DELETE':
+        collection_id = request.args.get('id', '0')
+        collection = Collection.get(collection_id)
+        collection.delete()
+    else:
+        collections = Collection.filter_all(user_id=current_user().id)
+        context["collections"] = collections
     return render_template('collections.html', context=context)

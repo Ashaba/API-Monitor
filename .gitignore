@@ -14,8 +14,6 @@ __pycache__/
 
 .pytest_cache
 
-test/test_db.sqlite/
-
 # Distribution / packaging
 .Python
 build/

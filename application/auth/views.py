@@ -17,6 +17,7 @@ def authenticate():
     try:
         payload = request.get_json()
         update_user(payload)
+        session['email'] = payload.get("email")
         session['name'] = payload.get("fullName")
         response = jsonify(dict(
             status="success",

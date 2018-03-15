@@ -1,20 +1,32 @@
-import requests
+import requests, json
 from application.models import Request
 
 
 def run_collection_checks(collection_id):
-	requests = Request.filter_by(collection_id=collection_id)
-	for req in requests:
-		print(req)
+	check_requests = Request.filter_by(collection_id=collection_id)
+	response = []
+	for req in check_requests:
+		headers = req.headers
+		url = req.url
+		if req.method == "GET":
+			if req.headers == "{}":
+				headers = None
+			response.append(make_get_request(url, headers))
+	return response
 
 
 def make_get_request(url, headers=None):
 	request = requests.get(url, headers=headers)
+	try:
+		response_object = request.json()
+	except Exception:
+		response_object = request.content.decode("utf-8")
+		
 	response = {
-		"statusCode": request.status_code,
-		"content": request.content,
-		"data": request.json(),
+		"status_code": request.status_code,
+		"data": response_object,
 		"url": request.url,
-		"headers": request.headers
+		"headers": json.dumps(dict(request.headers)),
+		"response_time": request.elapsed.total_seconds()
 	}
 	return response

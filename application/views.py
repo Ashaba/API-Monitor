@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 
 from application.auth.helpers import (current_user, authentication_required)
 from application.models import Team, Collection, Request
-from application.helpers import (run_collection_checks)
+from application.helpers import run_collection_checks
 
 app_view = Blueprint('app_view', __name__, template_folder='templates')
 
@@ -14,7 +14,7 @@ def dashboard():
     context["title"] = "Dashboard"
     if request.method == 'POST':
         payload = request.get_json()
-        
+
         def handle_request(n):
             if n < 1:
                 return "no data"
@@ -25,15 +25,25 @@ def dashboard():
                     method=payload[n].get("method"),
                     body=payload[n].get("body"),
                     url=payload[n].get("url"),
-                    headers=payload[n].get("headerKeys")
+                    headers=payload[n].get("headers")
                 )
                 req.save()
-                # collection = payload[n].get("collection")
-                run_collection_checks(2)
                 return handle_request(n)
         return handle_request(len(payload))
 
     return render_template("dashboard.html", context=context)
+
+
+@app_view.route('/results/<collection_id>', methods=['GET'])
+@app_view.route('/results', methods=['GET'])
+@authentication_required
+def result(collection_id=None):
+    response = jsonify(dict(
+        status="success",
+        response=run_collection_checks(collection_id)
+    ))
+    response.status_code = 200
+    return response
 
 
 @app_view.route('/team', methods=['POST', 'GET'])

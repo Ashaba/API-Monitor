@@ -7,6 +7,19 @@ team_members = db.Table(
 	db.Column('team_id', db.Integer, db.ForeignKey('Team.id'), nullable=False))
 
 
+class Team(Base):
+	"""
+	Model for team to access a collection of requests
+	"""
+	__tablename__ = 'Team'
+	__table_args__ = {'extend_existing': True}
+	name = db.Column(db.String(128), nullable=False)
+	user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+	
+	def __str__(self):
+		return self.name
+
+
 class Collection(Base):
 	"""
 	Model for Collection to group particular requests together
@@ -17,19 +30,6 @@ class Collection(Base):
 	name = db.Column(db.String(128), nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
 	team_id = db.Column(db.Integer, db.ForeignKey('Team.id'))
-	
-	def __str__(self):
-		return self.name
-
-
-class Team(Base):
-	"""
-	Model for team to access a collection of requests
-	"""
-	__tablename__ = 'Team'
-	__table_args__ = {'extend_existing': True}
-	name = db.Column(db.String(128), nullable=False)
-	user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
 	
 	def __str__(self):
 		return self.name

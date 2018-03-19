@@ -139,13 +139,25 @@ function getFormData(form) {
 }
 
 function postData(data, callback) {
+    var delay = 3000; //add a delay to simulate network request
     if (data.constructor === Array && data.length > 0) {
+        // show the spinner when the request is initiated
+        $('.loading-spinner').show();
         $.ajax({
             url: '/dashboard',
             type: 'POST',
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
-            success: callback
+            success: callback,
+            complete: function(){
+                //add a delay
+                setTimeout(function() {
+                    // hide the spinner when the request completes
+                    $('.loading-spinner').hide();
+                    // empty the form fields
+                    $('.form').trigger('reset');
+                }, delay);
+            }
         });
     } else {
         return false;
@@ -170,7 +182,15 @@ $('#submitForms').on('click', function() {
     $('.form').each(function() {
         data.push(getFormData($(this)));
     });
-    postData(data, onPostData)
+    postData(data, onPostData);
+});
+
+$('#runChecks').on('click', function() {
+    var data = [];
+    $('.form').each(function() {
+        data.push(getFormData($(this)));
+    });
+    postData(data, onPostData);
 });
 
 if(typeof module !== 'undefined') {

@@ -6,6 +6,8 @@
 
 .checkList {
     width: var(--side-bar-width);
+    height: calc(100vh - 11rem);
+    overflow-y: scroll;
     border-right: 0.1rem solid var(--border-grey);
     padding: 1rem 0;
     font-size: 1.4rem;
@@ -79,8 +81,33 @@
     padding: 2rem;
 }
 
-h3.collectionName {
+.collectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
+}
+
+.collectionHeader .fa-spinner {
+    display: none;
+}
+
+h3.collectionName {
+    
+}
+
+#runCollectionChecks, #saveCollectionChecks {
+    font-size: 1.3rem;
+    border: #83878c 0.1rem solid;
+    padding: 0.5rem 1rem;
+    color: #414244;
+    border-radius: 0.4rem;
+    display: inline-block;
+}
+
+#runCollectionChecks:hover, #saveCollectionChecks:hover {
+    cursor: pointer;
+    border-color: #414244;
 }
 
 .result {
@@ -158,4 +185,12 @@ h3.collectionName {
     display: none;
     border-top: 0.1rem dashed var(--border-grey);
     margin-top: 2rem;
+    padding: 1rem 0;
+    overflow-y: scroll;
+    font-size: 1rem;
+}
+
+.hint {
+    padding-left: 1rem;
+    font-size: 1.3rem;
 }

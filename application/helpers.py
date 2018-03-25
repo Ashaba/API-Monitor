@@ -1,7 +1,7 @@
 import requests
 import json
 import re
-from application.models import Request
+from application.models import Request, Response, ResponseSummary, ResponseAssertion
 
 
 def valid_url(url):
@@ -18,38 +18,63 @@ def valid_url(url):
 		return False
 	
 
-def run_collection_checks(collection_id):
-	check_requests = Request.filter_by(collection_id=collection_id)
-	response = []
-	for req in check_requests:
-		headers = req.headers
-		url = req.url
-		if req.method == "GET":
-			if req.headers == "{}":
-				headers = None
-			response.append(make_get_request(url, headers))
-	return response
+def run_collection_checks(collection_id, run_from):
+	checks = Request.filter_by(collection_id=collection_id)
+	response_summary = ResponseSummary(
+		status='success',
+		failures=0,
+		run_from=run_from,
+		collection_id=collection_id
+	)
 
+	for check in checks:
+		headers = {}
+		for header in check.headers:
+			headers[header.key] = header.value
 
-def make_get_request(url, headers=None):
-	if valid_url(url):
-		request = requests.get(url, headers=headers)
+		if check.method == "GET":
+			result = requests.get(check.url, headers=headers, verify=False)
+		response = Response(
+			status_code=result.status_code,
+			response_time=int(result.elapsed.total_seconds()),
+			headers=json.dumps(dict(result.headers)),
+			status='success',
+			failures=0,
+			request_id=check.id,
+			response_summary_id=response_summary.id
+		)
 		try:
-			response_object = request.json()
-		except Exception:
-			response_object = request.content.decode("utf-8")
-		
-		response = {
-			"status_code": request.status_code,
-			"data": response_object,
-			"url": request.url,
-			"headers": json.dumps(dict(request.headers)),
-			"response_time": request.elapsed.total_seconds()
-		}
-		return response
-	response = {
-		"status": "fail",
-		"message": "invalid url"
-	}
-	return response
+			data = json.dumps(result.json())
+		except json.decoder.JSONDecodeError:
+			data = str(result.content)
+		response.data = data
 
+		for assertion in check.assertions:
+			response_assertion = ResponseAssertion(
+				assertion_type=assertion.assertion_type,
+				comparison=assertion.comparison,
+				value=assertion.value,
+				status='failed',
+				request_assertion_id=assertion.id,
+				response_id=response.id)
+			if assertion.assertion_type == 'Status Code':
+				if assertion.value == response.status_code:
+					response_assertion.status = "success"
+			else:
+				if 'less' in assertion.comparison:
+					if response.response_time <= assertion.value:
+						response_assertion.status = "success"
+				else:
+					if response.response_time >= assertion.value:
+						response_assertion.status = "success"
+			if response_assertion.status == 'failed':
+				response.failures += 1
+				response.status = 'failed'
+			response.response_assertions.append(response_assertion)
+	
+		if response.status == 'failed':
+			response_summary.failures += 1
+			response_summary.status = 'failed'
+		response_summary.responses.append(response)
+
+	response_summary.save()

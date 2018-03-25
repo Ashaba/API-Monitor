@@ -115,7 +115,7 @@ h3.collectionName {
 .result__EditCheck {
     background-color: transparent;
     border: none;
-    color: var(--light-blue)
+    color: var(--light-blue);
 }
 
 .result__StatusCode svg {
@@ -125,6 +125,10 @@ h3.collectionName {
 .result__EditCheck:hover {
     cursor: pointer;
     color: var(--dark-blue)
+}
+
+.result__EditCheck:focus {
+    outline: none;
 }
 
 .result__Method {

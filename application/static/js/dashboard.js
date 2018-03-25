@@ -185,6 +185,7 @@ if(typeof module !== 'undefined') {
 
 function createCheck(index, checkData) {
     var check = $($.trim(checkTemplate));
+    check.attr('id', checkData.id);
 
     var removeButton = check.children("[class^=remove]");
     removeButton.on('click', { element: removeButton }, removeParent);

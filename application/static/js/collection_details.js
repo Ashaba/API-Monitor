@@ -53,6 +53,7 @@ $.each(context.results, function(index, resultsSet) {
 function createResult(containerIndex, resultData) {
     var result = $($.trim(resultTemplate));
     result.attr('id', resultData.id);
+    result.attr('data-context', resultData.checkId);
     result.find('.result__Url').html(resultData.url);
     result.find('.result__StatusCodeValue').html(resultData.statusCode);
     result.find('.result__ResponseTimeValue').html(resultData.responseTime);
@@ -105,4 +106,10 @@ function createResultSummary(index, resultSummaryData) {
     fullResultsPane.appendTo($('.resultsContainer'));
 }
 
-
+$('.result__EditCheck').click(function(){
+    $('a[href="#editor"]').parent().children().removeClass('active');
+    $('a[href="#editor"]').addClass('active');
+    $('#editor').parent().children('.tab-pane').removeClass('active');
+    $('#editor').addClass('active');
+    $(`#${$(this).parent().parent().parent().attr('data-context')}`).find('[name="url"]').focus();
+});

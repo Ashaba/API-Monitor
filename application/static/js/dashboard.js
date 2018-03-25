@@ -117,15 +117,20 @@ function getFormData(form) {
         headerValues: [],
         assertionSources: [],
         assertionComparisons: [],
-        assertionTargetValues: []
+        assertionTargetValues: [],
     };
+
+    var headersAndAssertions = {
+        headers: [],
+        assertions: []
+    }
 
     form.find('[name]').each(function (index1, value1) {
         var field = $(this),
             name = field.attr('name'),
             value = field.val(),
             plural_name = name + 's';
-
+        
         if (plural_name in list_entries) {
             list_entries[plural_name].push(value);
         } else {
@@ -133,9 +138,23 @@ function getFormData(form) {
         }
     });
 
-    $.extend(data, list_entries);
-    return data
+    $.each(list_entries.headerKeys, function(index, keyName) {
+        headersAndAssertions.headers.push({
+            key: keyName,
+            value: list_entries.headerValues[index]
+        });
+    });
 
+    $.each(list_entries.assertionSources, function(index, sourceName) {
+        headersAndAssertions.assertions.push({
+            source: sourceName,
+            comparison: list_entries.assertionComparisons[index],
+            value: list_entries.assertionTargetValues[index]
+        });
+    });
+
+    $.extend(data, headersAndAssertions);
+    return data;
 }
 
 function postData(data, callback) {
@@ -168,14 +187,9 @@ function onPostData() {
 
 }
 
-$('#addCheck').on(
-    'click',
-    {
-        container: $('#checksFormContainer'),
-        template: checkTemplate
-    },
-    addElement
-);
+$('#addCheck').on('click', function () {
+    createCheck(-1, {})
+});
 
 $('#submitForms').on('click', function() {
     var data = [];
@@ -191,6 +205,8 @@ $('#runChecks').on('click', function() {
         data.push(getFormData($(this)));
     });
     postData(data, onPostData);
+    console.log(data)
+    postData(data, onPostData)
 });
 
 if(typeof module !== 'undefined') {
@@ -204,3 +220,49 @@ if(typeof module !== 'undefined') {
         postData
     }
 }
+
+function createCheck(index, checkData) {
+    var check = $($.trim(checkTemplate));
+
+    var removeButton = check.children("[class^=remove]");
+    removeButton.on('click', { element: removeButton }, removeParent);
+
+    var navLinks = check.find('.nav-link');
+    $(navLinks[0]).attr('href', `#request${checkId}`);
+    $(navLinks[1]).attr('href', `#assertions${checkId}`);
+    var tabPanes = check.find('.tab-pane');
+    $(tabPanes[0]).attr('id', `request${checkId}`);
+    $(tabPanes[1]).attr('id', `assertions${checkId}`);
+    var headersContainer = check.find('#headers');
+    check.find('.addHeader').on(
+        'click',
+        {
+            container: headersContainer,
+            template: requestHeaderTemplate
+        },
+        addElement
+    )
+
+    var assertionsContainer = check.find('#assertionsBox');
+    var assertionsEvent = {
+        data: {
+            container: assertionsContainer,
+            template: checkAssertionTemplate
+        }
+    };
+    addElement(assertionsEvent);
+    check.find('.addAssertion').on(
+        'click',
+        assertionsEvent.data,
+        addElement
+    )
+    checkId++;
+
+    if($.isEmptyObject(checkData) == false) {
+        check.find('[name="method"]').val(checkData.method);
+        check.find('[name="url"]').val(checkData.url);
+    }
+    check.appendTo($('#checksFormContainer'));
+}
+
+$.each(context.checks, createCheck)

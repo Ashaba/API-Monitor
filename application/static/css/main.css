@@ -1,5 +1,10 @@
 :root {
     font-size: 62.5%;
+    --dark-blue: #0D4F8B;
+    --light-blue: #007bff;
+    --heading-grey: #868585;
+    --border-grey: #dcdcdc;
+    /* 00688B */
 }
 
 body {
@@ -52,7 +57,7 @@ body {
 }
 
 #checks .header, #addCheck {
-    margin: 0 2rem;
+    margin: 2rem;
 }
 
 #checks .header .title {
@@ -94,10 +99,11 @@ body {
 }
 
 .check {
-    margin: 2rem;
-    padding: 1rem;
-    border: 0.1rem #e6e6e6 dashed;
     position: relative;
+    padding: 1rem 2rem;
+    border: 0.1rem solid var(--border-grey);
+    border-radius: 0.4rem;
+    margin-bottom: 1rem;
 }
 
 .check .removeCheck {

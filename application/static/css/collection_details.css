@@ -1,0 +1,157 @@
+.collection {
+    display: flex;
+    --side-bar-width: 30rem;
+    border: 0.1rem solid var(--border-grey);
+}
+
+.checkList {
+    width: var(--side-bar-width);
+    border-right: 0.1rem solid var(--border-grey);
+    padding: 1rem 0;
+    font-size: 1.4rem;
+}
+
+.checkList__Heading {
+    margin: 1rem;
+}
+
+.checkList svg {
+    margin-right: 1rem;
+    color: var(--dark-blue);
+}
+
+.checkList .nav-link {
+    color: #212529;
+    border-left: 0.2rem solid transparent;
+}
+
+.resultSummary {
+    display: flex;
+    justify-content: space-between;
+}
+
+.resultSummary__Status svg {
+    margin-right: 0;
+}
+
+.resultSummary_Failures, .resultSummary__RunFrom {
+    color: var(--heading-grey);
+    font-size: 1.2rem;
+}
+
+.resultSummary__Date {
+    margin-bottom: 0;
+}
+
+.resultSummary_briefDetails {
+    text-align: right;
+}
+
+.checkList .nav-link.active {
+    background-color: #eee;
+    border-left: 0.2rem solid var(--dark-blue);
+}
+
+.checkList .nav-link:hover {
+    color: var(--light-blue);
+}
+
+.checkList hr {
+    margin: 1.5rem 0;
+}
+
+.previousChecks {
+    list-style: none;
+    padding: 0;
+}
+
+.previousChecks > li {
+    padding: 1rem;
+}
+
+.previousChecks > li:hover {
+    cursor: pointer;
+    background-color: var(--border-grey);
+}
+
+.tab-content {
+    width: 100%;
+    padding: 2rem;
+}
+
+h3.collectionName {
+    margin-bottom: 2rem;
+}
+
+.result {
+    padding: 1rem 3rem;
+    border: 0.1rem solid var(--border-grey);
+    border-radius: 0.4rem;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.result__Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.result_Arrow {
+    position: absolute;
+    left: -1.5rem;
+    top: 0.2rem;
+}
+
+.result_Arrow:hover {
+    cursor: pointer;
+}
+
+.result__Response > span {
+    margin-right: 2rem;
+}
+
+.result__EditCheck {
+    background-color: transparent;
+    border: none;
+    color: var(--light-blue)
+}
+
+.result__StatusCode svg {
+    color: green;
+}
+
+.result__EditCheck:hover {
+    cursor: pointer;
+    color: var(--dark-blue)
+}
+
+.result__Method {
+    font-weight: bolder;
+    display: inline-block;
+    margin: 1rem 0 2rem;
+}
+
+.result__AssertionsHeading {
+    color: var(--heading-grey);
+}
+
+.result__Assertion{
+    margin: 1rem 0;
+}
+
+.result__AssertionIcon.fa-check {
+    color: green;
+}
+
+.result__AssertionIcon.fa-times {
+    color: red;
+}
+
+.result_More {
+    height: 20rem;
+    display: none;
+    border-top: 0.1rem dashed var(--border-grey);
+    margin-top: 2rem;
+}

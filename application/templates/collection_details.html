@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% from 'banner.html' import banner %}
+
+<body>
+    {% block body %}
+
+    <main role="main" class="container">
+        {{ banner() }}
+        <span id="dataContainer" data-context="{{ context|tojson }}"></span>
+        <div class="collection">
+            <div class="checkList">
+                <h4 class="checkList__Heading">Show</h4>
+                <nav class="nav flex-column navLinks" role="tablist">
+                    <a class="nav-link active" data-toggle="tab" href="#results" role="tab"><i class="fa fa-list"></i><span>Summary</span></a>
+                    <a class="nav-link" data-toggle="tab" href="#editor" role="tab"><i class="fa fa-pencil-alt"></i><span>Editor</span></a>
+                
+                <hr>
+                <h4 class="checkList__Heading">Results</h4>
+                <a class="nav-link resultSummary" data-toggle="tab" href="#results" role="tab">
+                    <div class="resultSummary__StatusContainer">
+                        <div class="resultSummary__Status">
+                            <i class="fa fa-times resultSummary__StatusIcon"></i>
+                            <span class="resultSummary__StatusText">Failed</span>
+                        </div>
+                        <p class="resultSummary_Failures">2 failures</p>
+                    </div>
+                    <div class="resultSummary_briefDetails">
+                        <p class="resultSummary__Date">Mar 15 6:17pm</p>
+                        <p class="resultSummary__RunFrom">via Dashboard</p>
+                    </div>
+                </a>
+                </nav>
+            </div>
+            <div class="tab-content resultsContainer">
+                <h3 class="collectionName">Collection Name</h3>
+                <div id="results" class="tab-pane active"></div>
+                <div id="editor" class="tab-pane">
+                    <div id="checks">
+                        <div class="header">
+                            <div class="checksTitle">
+                            <span class="title">CHECKS</span>
+                            </div>
+                            <div class="menu">
+                            <span id="submitForms">
+                                Save <img width="20px" height="20px" src="../static/images/ic_save_black.png" alt="Save changes"/>
+                            </span>
+                            <span id="runChecks">
+                                Run <img width="20px" height="20px" src="../static/images/ic_send_black.png" alt="Run checks"/>
+                            </span>
+                            </div>
+                        </div>
+                        <div id="checksFormContainer"></div>
+                        <span class="add-button" id="addCheck">+ Add check</span>
+                    </div>
+                          
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        var context = {{ context|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/collection_details.js') }}"></script> 
+    
+    {% endblock %}
+</body>

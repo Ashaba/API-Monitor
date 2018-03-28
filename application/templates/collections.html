@@ -8,11 +8,12 @@
       <div class="container-box">
             <div class="container-box">
                 <h3 class="pb-2 mb-0">Add Collection</h3>
-                <form id="form-collection" method="post" action="#">
+                <form id="form-collection" method="post" action="">
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <label for="collectionName">Name</label>
-                            <input type="text" name="collection" class="form-control" id="collection">
+                            <input type="text" name="collection" class="form-control" id="collection" required>
+                            <small class="text-muted"><span id="collections-error" style="color:red; display:none;">You already have a collection with this name</span></small>
                         </div>
                         <div class="form-group col-sm-6">
                             <label for="collectionTeam">Team</label> 

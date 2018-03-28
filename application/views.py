@@ -66,6 +66,12 @@ def collections():
     if request.method == 'POST':
         name = request.form["collection"]
         team_id = request.form["team"] if request.form["team"] != 'none' else None 
+
+        existing_collection = Collection.query.filter(Collection.user_id == current_user().id,
+                                                      Collection.name == name).first()
+        if existing_collection:
+            return "duplicate_collection"
+
         collection = Collection(name=name, user_id=current_user().id, team_id=team_id)
         collection.save()
 
@@ -73,7 +79,7 @@ def collections():
         collection_id = request.args.get('id', '0')
         collection = Collection.get(collection_id)
         collection.delete()
-    else:
-        collections = Collection.filter_all(user_id=current_user().id)
-        context["collections"] = collections
+    
+    user_collections = Collection.filter_all(user_id=current_user().id)
+    context["collections"] = user_collections
     return render_template('collections.html', context=context)

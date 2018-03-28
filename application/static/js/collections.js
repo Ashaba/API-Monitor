@@ -1,15 +1,25 @@
-$("#form-collection").submit(function (event) {
+$("#form-collection").submit(addCollection);
+
+function addCollection (event) {
+    console.log(event);
     event.preventDefault();
     var form_data = $(this).serializeArray();
+    console.log(form_data);
     $.ajax({
         type: 'POST',
         url: '/collections',
         data: form_data,
-        success: function(response) {
-            window.location.reload(true);
-        }
+        success: onAddCollection
     });
-});
+}
+
+function onAddCollection (response) {
+    if(response === "duplicate_collection") {
+        $("#collections-error").show();
+    } else {
+        window.location.reload(true);
+    }
+}
 
 $('.collection-card').on('click', function() {
     var card = $(this);
@@ -36,3 +46,10 @@ $(".collection-delete").on('click', function () {
         }
     });
 });
+
+if(typeof module !== 'undefined') {
+    module.exports.main = {
+        addCollection,
+        onAddCollection
+    }
+}

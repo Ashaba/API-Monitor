@@ -83,3 +83,399 @@ def collections():
     user_collections = Collection.filter_all(user_id=current_user().id)
     context["collections"] = user_collections
     return render_template('collections.html', context=context)
+
+
+@app_view.route('/collection_details', methods=['GET'])
+@authentication_required
+def results():
+    context = dict()
+    context["title"] = "Results"
+    context["checks"] = [
+        {
+            'id': '123',
+            'method': 'GET',
+            'url': 'facebook.com/login',
+            'headers': [
+                {
+                    'id': '9883',
+                    'key': 'token',
+                    'value': '67sqqq8jbsbakbakbs'
+                },
+                {
+                    'id': '746',
+                    'key': 'userId',
+                    'value': 'flyguy'
+                }
+            ],
+            'assertions': [
+                {
+                    'id': '211',
+                    'type': 'Status Code',
+                    'comparison': 'equal (number)',
+                    'value': '200',
+                },
+                {
+                    'id': '212',
+                    'type': 'Response Time (ms)',
+                    'comparison': 'greater than or equal to',
+                    'value': '100ms',
+                },
+            ]
+        },
+        {
+            'id': '124',
+            'method': 'POST',
+            'url': 'yahoo.com/login',
+            'headers': [
+                {
+                    'id': '45',
+                    'key': 'userID',
+                    'value': '7801'
+                },
+                {
+                    'id': '14',
+                    'key': 'userEmail',
+                    'value': 'test@yahoo.com'
+                }
+            ],
+            'assertions': [
+                {
+                    'id': '90',
+                    'type': 'Status Code',
+                    'comparison': 'equal (number)',
+                    'value': '201',
+                },
+                {
+                    'id': '21',
+                    'type': 'Response Time (ms)',
+                    'comparison': 'greater than or equal to',
+                    'value': '100ms',
+                },
+            ]
+        },
+        {
+            'id': '125',
+            'method': 'PUT',
+            'url': 'calm-staging.andela.com/stacks',
+            'headers': [
+                {
+                    'id': '71',
+                    'key': 'stackID',
+                    'value': '67eyT'
+                },
+                {
+                    'id': '73',
+                    'key': 'Token',
+                    'value': '783NTmmzaq&TG33cBgASKy'
+                }
+            ],
+            'assertions': [
+                {
+                    'id': '2118',
+                    'type': 'Status Code',
+                    'comparison': 'equal (number)',
+                    'value': '200',
+                },
+                {
+                    'id': '222',
+                    'type': 'Response Time (ms)',
+                    'comparison': 'less than',
+                    'value': '300ms',
+                },
+            ]
+        },
+    ]
+    context['results'] = [
+        {
+            'summary': {
+                'status': 'success',
+                'failures': '0',
+                'date': 'Mar 15 6:17pm',
+                'runFrom': 'Dashboard'
+            },
+            'results': [
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'GET/',
+                    'statusCode': '200',
+                    'responseTime': '500ms',
+                    'checkId': '124',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                },
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '123',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                },
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '125',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                },
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '124',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                },
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '123',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                }
+            ]
+        },
+        {
+            'summary': {
+                'status': 'failed',
+                'failures': '1',
+                'date': 'Jun 26 16:35pm',
+                'runFrom': 'Schedule'
+            },
+            'results': [
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'GET/',
+                    'statusCode': '200',
+                    'responseTime': '500ms',
+                    'checkId': '123',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                },
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '124',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                }
+            ]
+        },
+        {
+            'summary': {
+                'status': 'failed',
+                'failures': '22',
+                'date': 'Feb 30 12:00pm',
+                'runFrom': 'Dashboard'
+            },
+            'results': [
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '125',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                },
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '123',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                },
+                {
+                    'id': '123',
+                    'url': 'facebook.com/login',
+                    'method': 'POST/',
+                    'statusCode': '200',
+                    'responseTime': '723ms',
+                    'checkId': '124',
+                    'assertions': [
+                        {
+                            'id': '211',
+                            'type': 'Status code',
+                            'comparison': 'equal to',
+                            'status': 'success',
+                            'expected': '200',
+                            'received': '200'
+                        },
+                        {
+                            'id': '212',
+                            'type': 'Response time',
+                            'comparison': 'less than',
+                            'status': 'fail',
+                            'expected': '100ms',
+                            'received': '500ms'
+                        },
+                    ]
+                }
+            ]
+        }
+        
+    ]
+    return render_template('collection_details.html', context=context)

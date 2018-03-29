@@ -8,15 +8,15 @@ const requestHeaderTemplate = `
     checkAssertionTemplate = `
     <div class="assertion">
         <select name="assertionSource" class="form-control assertion-value">
-            <option>Status Code</option>
-            <option>Response Time (ms)</option>
+            <option value="Status Code">Status Code</option>
+            <option value="Response Time (ms)">Response Time (ms)</option>
         </select>
         <select name="assertionComparison" class="form-control assertion-value">
-            <option>equal (number)</option>
-            <option>less than</option>
-            <option>less than or equal to</option>
-            <option>greater than</option>
-            <option>greater than or equal to</option>
+            <option value="equal (number)">equal (number)</option>
+            <option value="less than">less than</option>
+            <option value="less than or equal to">less than or equal to</option>
+            <option value="greater than">greater than</option>
+            <option value="greater than or equal to">greater than or equal to</option>
         </select>
         <input name="assertionTargetValue" type="text" class="form-control assertion-value" id="targetValue" placeholder="Enter value">
         <span class="remove-assertion">&times;</span>
@@ -37,10 +37,10 @@ const requestHeaderTemplate = `
                     <span class="tab-pane-heading">ENDPOINT</span>
                     <div class="form-inline requestForm">
                         <select name="method" class="form-control">
-                            <option>GET</option>
-                            <option>POST</option>
-                            <option>PUT</option>
-                            <option>DELETE</option>
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
                         </select>
                         <input name="url" type="text" class="form-control url-input" placeholder="URL">
                     </div>
@@ -64,44 +64,6 @@ const requestHeaderTemplate = `
 `;
 
 var checkId = 0;
-function addElement(event) {
-    var element = $($.trim(event.data.template));
-    var removeButton = element.children("[class^=remove]");
-    removeButton.on('click', { element: removeButton }, removeParent);
-    if (event.data.template == checkTemplate) {
-        var navLinks = element.find('.nav-link');
-        $(navLinks[0]).attr('href', `#request${checkId}`);
-        $(navLinks[1]).attr('href', `#assertions${checkId}`);
-        var tabPanes = element.find('.tab-pane');
-        $(tabPanes[0]).attr('id', `request${checkId}`);
-        $(tabPanes[1]).attr('id', `assertions${checkId}`);
-        var headersContainer = element.find('#headers');
-        element.find('.addHeader').on(
-            'click',
-            {
-                container: headersContainer,
-                template: requestHeaderTemplate
-            },
-            addElement
-        )
-
-        var assertionsContainer = element.find('#assertionsBox');
-        var assertionsEvent = {
-            data: {
-                container: assertionsContainer,
-                template: checkAssertionTemplate
-            }
-        };
-        addElement(assertionsEvent);
-        element.find('.addAssertion').on(
-            'click',
-            assertionsEvent.data,
-            addElement
-        )
-        checkId++;
-    }
-    event.data.container.append(element);
-}
 
 function removeParent(event) {
     event.data.element.parent().remove();
@@ -117,15 +79,20 @@ function getFormData(form) {
         headerValues: [],
         assertionSources: [],
         assertionComparisons: [],
-        assertionTargetValues: []
+        assertionTargetValues: [],
     };
+
+    var headersAndAssertions = {
+        headers: [],
+        assertions: []
+    }
 
     form.find('[name]').each(function (index1, value1) {
         var field = $(this),
             name = field.attr('name'),
             value = field.val(),
             plural_name = name + 's';
-
+        
         if (plural_name in list_entries) {
             list_entries[plural_name].push(value);
         } else {
@@ -133,9 +100,23 @@ function getFormData(form) {
         }
     });
 
-    $.extend(data, list_entries);
-    return data
+    $.each(list_entries.headerKeys, function(index, keyName) {
+        headersAndAssertions.headers.push({
+            key: keyName,
+            value: list_entries.headerValues[index]
+        });
+    });
 
+    $.each(list_entries.assertionSources, function(index, sourceName) {
+        headersAndAssertions.assertions.push({
+            source: sourceName,
+            comparison: list_entries.assertionComparisons[index],
+            value: list_entries.assertionTargetValues[index]
+        });
+    });
+
+    $.extend(data, headersAndAssertions);
+    return data;
 }
 
 function postData(data, callback) {
@@ -168,14 +149,9 @@ function onPostData() {
 
 }
 
-$('#addCheck').on(
-    'click',
-    {
-        container: $('#checksFormContainer'),
-        template: checkTemplate
-    },
-    addElement
-);
+$('#addCheck').on('click', function () {
+    createCheck(-1, {})
+});
 
 $('#submitForms').on('click', function() {
     var data = [];
@@ -191,6 +167,8 @@ $('#runChecks').on('click', function() {
         data.push(getFormData($(this)));
     });
     postData(data, onPostData);
+    console.log(data)
+    postData(data, onPostData)
 });
 
 if(typeof module !== 'undefined') {
@@ -204,3 +182,72 @@ if(typeof module !== 'undefined') {
         postData
     }
 }
+
+function createCheck(index, checkData) {
+    var check = $($.trim(checkTemplate));
+    check.attr('id', checkData.id);
+
+    var removeButton = check.children("[class^=remove]");
+    removeButton.on('click', { element: removeButton }, removeParent);
+
+    var navLinks = check.find('.nav-link');
+    $(navLinks[0]).attr('href', `#request${checkId}`);
+    $(navLinks[1]).attr('href', `#assertions${checkId}`);
+    var tabPanes = check.find('.tab-pane');
+    $(tabPanes[0]).attr('id', `request${checkId}`);
+    $(tabPanes[1]).attr('id', `assertions${checkId}`);
+    var headersContainer = check.find('#headers');
+    check.find('.addHeader').click(function() {
+        createHeader(check, {});
+    })
+
+    check.find('.addAssertion').click(function() {
+        createAnAssertion(check, {});
+    })
+    checkId++;
+
+    if($.isEmptyObject(checkData) == false) {
+        check.find('[name="method"]').val(checkData.method);
+        check.find('[name="url"]').val(checkData.url);
+        if('headers' in checkData && checkData.headers.length > 0) {
+            $.each(checkData.headers, function(index, headerData) {
+                createHeader(check, headerData);
+            });
+        }
+        if('assertions' in checkData && checkData.assertions.length > 0) {
+            $.each(checkData.assertions, function(index, assertionData) {
+                createAnAssertion(check, assertionData);
+            });
+        } else {
+            createAnAssertion(check, {});
+        }
+    } else {
+        createAnAssertion(check, {});
+    }
+    check.appendTo($('#checksFormContainer'));
+}
+
+function createHeader(check, headerData) {
+    var header = $($.trim(requestHeaderTemplate));
+    header.find('[name="headerKey"]').val(headerData.key);
+    header.find('[name="headerValue"]').val(headerData.value);
+    header.find('.removeHeader').click(function(){
+        header.remove();
+    });
+    header.appendTo(check.find('.headers'));
+}
+
+function createAnAssertion(check, assertionData) {
+    var assertion = $($.trim(checkAssertionTemplate));
+    if($.isEmptyObject(assertionData) == false){
+        assertion.find('[name="assertionSource"]').val(assertionData.type);
+        assertion.find('[name="assertionComparison"]').val(assertionData.comparison);
+        assertion.find('[name="assertionTargetValue"]').val(assertionData.value);
+    }
+    assertion.find('.remove-assertion').click(function(){
+        assertion.remove();
+    });
+    assertion.appendTo(check.find('.assertions'));
+}
+
+$.each(context.checks, createCheck)

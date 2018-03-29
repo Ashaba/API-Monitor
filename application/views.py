@@ -14,7 +14,8 @@ def dashboard():
     context["title"] = "Dashboard"
     if request.method == 'POST':
         payload = request.get_json()
-
+        print(payload)
+        
         def handle_request(n):
             if n < 1:
                 return "no data"

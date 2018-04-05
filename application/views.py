@@ -72,7 +72,7 @@ def collections():
     return render_template('collections.html', context=context)
 
 
-@app_view.route('/collection-details/<collection_id>', methods=['GET'])
+@app_view.route('/collection-details/<collection_id>', methods=['GET', 'PUT'])
 @authentication_required
 def collection_details(collection_id=None):
     context = {}

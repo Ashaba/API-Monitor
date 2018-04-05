@@ -2,6 +2,7 @@ import requests
 import json
 import re
 from application.models import Request, Response, ResponseSummary, ResponseAssertion, Collection
+from application.models import Request, Collection
 
 
 def collection_scheduler():
@@ -84,3 +85,20 @@ def run_collection_checks(collection_id, run_from):
 		response_summary.responses.append(response)
 
 	response_summary.save()
+
+
+def make_get_request(url, headers=None):
+	request = requests.get(url, headers=headers)
+	try:
+		response_object = request.json()
+	except Exception:
+		response_object = request.content.decode("utf-8")
+		
+	response = {
+		"status_code": request.status_code,
+		"data": response_object,
+		"url": request.url,
+		"headers": json.dumps(dict(request.headers)),
+		"response_time": request.elapsed.total_seconds()
+	}
+	return response

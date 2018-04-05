@@ -1,7 +1,13 @@
 import requests
 import json
 import re
-from application.models import Request, Response, ResponseSummary, ResponseAssertion
+from application.models import Request, Response, ResponseSummary, ResponseAssertion, Collection
+
+
+def collection_scheduler():
+	collections = Collection.fetch_all()
+	for collection in collections:
+		run_collection_checks(collection.id)
 
 
 def valid_url(url):

@@ -1,9 +1,7 @@
-from datetime import datetime
-
 from flask import Blueprint, render_template, request, jsonify
 
 from application.auth.helpers import (current_user, authentication_required)
-from application.models import Team, Collection, RequestAssertion, ResponseAssertion, ResponseSummary, Request, Header
+from application.models import Team, Collection, RequestAssertion, ResponseSummary, Request, Header
 from application.helpers import run_collection_checks
 
 app_view = Blueprint('app_view', __name__, template_folder='templates')
@@ -124,6 +122,9 @@ def collection_details(collection_id=None):
         results.append(responseSet)
     context['results'] = results
     context['collection_name'] = Collection.get(collection_id).name
+    collection = Collection.get(collection_id)
+    context["collection"] = collection.serialize()
+    
     return render_template('collection_details.html', context=context)
 
 

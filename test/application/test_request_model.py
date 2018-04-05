@@ -1,5 +1,5 @@
-from ..base import BaseTestCase, db
-from application.models import Header, Request
+from test.base import BaseTestCase
+from application.models import Request
 
 
 class TestRequestModel(BaseTestCase):

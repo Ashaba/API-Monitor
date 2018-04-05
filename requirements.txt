@@ -51,6 +51,7 @@ PyYAML==3.12
 query-string==0.0.28
 requests==2.18.4
 rsa==3.4.2
+schedule==0.5.0
 six==1.11.0
 SQLAlchemy==1.2.2
 uritemplate==3.0.0

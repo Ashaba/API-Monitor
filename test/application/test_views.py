@@ -1,4 +1,4 @@
-from ..base import BaseTestCase, user_payload
+from test.base import BaseTestCase, user_payload
 import json
 from application.models import db, Collection, Header, Request, RequestAssertion, Team
 from application.auth.models import User

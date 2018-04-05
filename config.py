@@ -44,6 +44,7 @@ class DevelopmentConfiguration(ConfigWithCustomDBEngineParams):
     DEBUG = True
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    ALLOWED_HOSTS = "http://localhost:5000"
 
 
 class TestingConfiguration(Config):

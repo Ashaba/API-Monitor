@@ -12,12 +12,14 @@
                 <nav class="nav flex-column navLinks" role="tablist">
                     <a class="nav-link active" data-toggle="tab" href="#results" role="tab"><i class="fa fa-list"></i><span>Summary</span></a>
                     <a class="nav-link" data-toggle="tab" href="#editor" role="tab"><i class="fa fa-pencil-alt"></i><span>Editor</span></a>
+                     <a class="nav-link" data-toggle="tab" href="#schedule" role="tab"><i class="fa fa-clock"></i><span>Schedule</span></a>
                 
                 <hr>
                 <h4 class="checkList__Heading">Results</h4>
                 </nav>
             </div>
             <div class="tab-content resultsContainer">
+<<<<<<< HEAD
                 <div class="collectionHeader">
                     <span class="collectionName">{{context.collection_name}}</span>
                     <span>
@@ -27,6 +29,9 @@
                         </span>
                     </span>
                 </div>
+=======
+                <h3 class="collectionName">{{ context["collection"]["name"] }} </h3>
+>>>>>>> feat(schedule): schedule collection checks
                 <div id="results" class="tab-pane active"></div>
                 <div id="editor" class="tab-pane">
                     <div id="checks">
@@ -45,6 +50,27 @@
                         <span class="add-button" id="addCheck">+ Add check</span>
                     </div>
                           
+                </div>
+                <div id="schedule" class="tab-pane active">
+                    <div class="row">
+                        <div class='col-sm-6'>
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker3'>
+                                    <input type='text' class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker3').datetimepicker({
+                                    format: 'LT'
+                                });
+                            });
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-from ..base import BaseTestCase, user_payload
+from test.base import BaseTestCase, user_payload
 import json
 
 

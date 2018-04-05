@@ -1,7 +1,6 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy.exc import SQLAlchemyError
-
+from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 

@@ -24,7 +24,7 @@ function onAddCollection (response) {
 $('.collection-card').on('click', function() {
     var card = $(this);
     var id = card.attr('id');
-    window.location.replace('/collections?id=' + id);
+    window.location.replace('/collection-details/' + id);
 });
 
 $(".collection-delete").on('click', function () {

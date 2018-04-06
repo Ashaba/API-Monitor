@@ -32,7 +32,7 @@
             <div class="card-columns">
                 {% if context["collections"] %}
                     {% for collection in context["collections"] %}
-                        <div class="card collection-card" id="collection-{{ collection.id }}">
+                        <div class="card collection-card" id="{{ collection.id }}">
                             <div class="card-body">
                                 <button type="button" class="close collection-delete" aria-label="Close" id="delete-collection-{{ collection.id }}">
                                     <span aria-hidden="true">&times;</span>

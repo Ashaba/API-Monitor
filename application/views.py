@@ -85,9 +85,9 @@ def collections():
     return render_template('collections.html', context=context)
 
 
-@app_view.route('/collection_details', methods=['GET'])
+@app_view.route('/collection-details/<collection_id>', methods=['GET'])
 @authentication_required
-def results():
+def results(collection_id):
     context = dict()
     context["title"] = "Results"
     context["checks"] = [

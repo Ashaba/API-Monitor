@@ -1,10 +1,32 @@
 from ..base import BaseTestCase, user_payload
 import json
-from application.models import db, Collection, Team
+from application.models import db, Collection, Request, Team
 from application.auth.models import User
 
 
 class TestApplication(BaseTestCase):
+	checks = [
+		{
+			"method":"GET",
+			"id":"",
+			"url":"https://lmap-staging-test.andela.com/api/v1/careers",
+			"headers":[
+				{
+					"key":"Token",
+					"value":"someToken",
+					"id":""
+				}
+			],
+			"assertions":[
+				{
+					"assertion_type":"Status Code",
+					"comparison":"equal (number)",
+					"value":"200",
+					"id":""
+				}
+			]
+		}
+	]
 
 	def setUp(self):
 		db.drop_all()
@@ -114,3 +136,46 @@ class TestApplication(BaseTestCase):
 		self.assertTrue(self.get_context_variable('context')['collections'])
 		self.assertEqual(len(self.get_context_variable('context')['collections']), 1)
 		self.assertListEqual(self.get_context_variable('context')['collections'], [self.collection_two])
+
+	def test_post_check(self):
+		self.client.post('/auth', data=json.dumps(user_payload), content_type='application/json')
+		collection = Collection(name='Test Collection', user_id=self.user.id)
+		collection.save()
+		old_number_of_checks = len(collection.requests)
+		
+		self.checks[0]['id'] = ""
+		response = self.client.post(
+			f'/collection-details/{collection.id}/update',
+			data=json.dumps(self.checks), content_type='application/json')
+		self.assertEqual(response.status_code, 200)
+		new_number_of_checks = len(collection.requests)
+		self.assertEqual(new_number_of_checks, old_number_of_checks + 1)
+
+	def test_update_check(self):
+		self.client.post('/auth', data=json.dumps(user_payload), content_type='application/json')
+		collection = Collection(name='Test Collection', user_id=self.user.id)
+		collection.save()
+		request = Request(
+			collection_id=collection.id,
+			method='GET',
+			url='https://test.com',
+		)
+		request.save()
+		old_number_of_headers = len(request.headers)
+		self.checks[0]['id'] = f"{request.id}"
+		response = self.client.post(
+			f'/collection-details/{collection.id}/update',
+			data=json.dumps(self.checks), content_type='application/json')
+		self.assertEqual(response.status_code, 200)
+		new_number_of_headers = len(request.headers)
+		self.assertEqual(new_number_of_headers, old_number_of_headers + 1)
+
+	def test_fetch_collection_details(self):
+		self.client.post('/auth', data=json.dumps(user_payload), content_type='application/json')
+		collection = Collection(name='Test Collection', user_id=self.user.id)
+		collection.save()
+		response = self.client.get(f'/collection-details/{collection.id}')
+		self.assertEqual(response.status_code, 200)
+		self.assertTrue('checks' in self.get_context_variable('context'))
+		self.assertTrue('results' in self.get_context_variable('context'))
+		self.assertEqual(self.get_context_variable('context')['collection_name'], collection.name)

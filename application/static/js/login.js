@@ -18,7 +18,7 @@ function onSignIn(googleUser) {
             window.location.href = "/dashboard"
         },
         error: function (data) {
-            console.log(data);
+            
         }
     });
 }

@@ -127,7 +127,6 @@ function getFormData(form) {
 }
 
 function postData(data, callback) {
-    console.log(JSON.stringify(data))
     url = ($(location).attr('pathname')) + '/update';
     var delay = 3000; //add a delay to simulate network request
     if (data.constructor === Array && data.length > 0) {

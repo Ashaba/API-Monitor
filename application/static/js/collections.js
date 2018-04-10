@@ -1,10 +1,8 @@
 $("#form-collection").submit(addCollection);
 
 function addCollection (event) {
-    console.log(event);
     event.preventDefault();
     var form_data = $(this).serializeArray();
-    console.log(form_data);
     $.ajax({
         type: 'POST',
         url: '/collections',
@@ -36,7 +34,6 @@ $(".collection-delete").on('click', function () {
     var close_id = card.attr('id');
     var parts = close_id.split('-');
     var collection_id = parts[parts.length - 1];
-    console.log(collection_id);
     $.ajax({
         type: 'DELETE',
         url: '/collections' + '?' + $.param({"id": collection_id}),

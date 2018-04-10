@@ -31,7 +31,6 @@ class Base(db.Model):
             db.session.commit()
             return True
         except SQLAlchemyError as e:
-            print("****************", e)
             db.session.rollback()
             return False
 

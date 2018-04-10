@@ -12,15 +12,13 @@
                 <nav class="nav flex-column navLinks" role="tablist">
                     <a class="nav-link active" data-toggle="tab" href="#results" role="tab"><i class="fa fa-list"></i><span>Summary</span></a>
                     <a class="nav-link" data-toggle="tab" href="#editor" role="tab"><i class="fa fa-pencil-alt"></i><span>Editor</span></a>
-                     <a class="nav-link" data-toggle="tab" href="#schedule" role="tab"><i class="fa fa-clock"></i><span>Schedule</span></a>
+                    <a class="nav-link" data-toggle="tab" href="#schedule" role="tab"><i class="fa fa-clock"></i><span>Schedule</span></a>
                 
                 <hr>
                 <h4 class="checkList__Heading">Results</h4>
                 </nav>
             </div>
             <div class="tab-content resultsContainer">
-<<<<<<< HEAD
-<<<<<<< HEAD
                 <div class="collectionHeader">
                     <span class="collectionName">{{context.collection_name}}</span>
                     <span>
@@ -30,12 +28,7 @@
                         </span>
                     </span>
                 </div>
-=======
                 <h3 class="collectionName">{{ context["collection"]["name"] }} </h3>
->>>>>>> feat(schedule): schedule collection checks
-=======
-                <h3 class="collectionName">{{ context["collection"]["name"] }} </h3>
->>>>>>> feat(schedule): schedule collection checks
                 <div id="results" class="tab-pane active"></div>
                 <div id="editor" class="tab-pane">
                     <div id="checks">
@@ -55,25 +48,33 @@
                     </div>
                           
                 </div>
-                <div id="schedule" class="tab-pane active">
-                    <div class="row">
-                        <div class='col-sm-6'>
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker3'>
-                                    <input type='text' class="form-control" />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-time"></span>
-                                    </span>
-                                </div>
-                            </div>
+                <div id="schedule" class="tab-pane">
+                    <div class="schedule-box">
+                        <div class="schedule-title">
+                            Set the period between the pings to the requests in the collection
                         </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker3').datetimepicker({
-                                    format: 'LT'
-                                });
-                            });
-                        </script>
+                        <form class="update-timeout-form" method="put" action="" id="{{ context["collection"]['id'] }}">
+                            <input type="hidden" name="time" id="update-timeout-timeout" />
+                            <div>
+                                <div>
+                                    <div class="update-timeout-info text-center">
+                                        <span
+                                            class="update-timeout-label"
+                                            data-toggle="tooltip"
+                                            title="Expected period between pings.">
+                                            Period:
+                                        </span>
+                                        <span
+                                            id="period-slider-value"
+                                            class="update-timeout-value">
+                                            1 day
+                                        </span>
+                                    </div>
+                                    <div id="period-slider"></div>
+                                </div>
+                                <button type="submit" class="btn btn-secondary btn-lg">Save</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -83,7 +84,8 @@
         var context = {{ context|tojson }};
     </script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/collection_details.js') }}"></script> 
-    
+    <script src="{{ url_for('static', filename='js/collection_details.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scheduler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/nouislider.min.js') }}"></script>
     {% endblock %}
 </body>

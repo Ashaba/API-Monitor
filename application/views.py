@@ -207,7 +207,24 @@ def update_collection_checks(collection_id=None):
             assertion.value = _assertion['value']
             assertion.request_id = check.id
             assertion.save()
-    response = jsonify(dict(
-        errors=errors
-    ))
-    return response
+
+    if request.method == 'PUT':
+        try:
+            collection = Collection.get(collection_id)
+            payload = request.get_json()
+            print(payload)
+            collection.schedule = payload.get("time")
+            collection.save()
+        except Exception as e:
+            print(e)
+    
+    return render_template('collection_details.html')
+
+
+@app_view.route('/settings', methods=['GET'])
+@authentication_required
+def settings():
+    context = dict()
+    context["title"] = "Settings"
+
+    return render_template("settings.html", context=context)

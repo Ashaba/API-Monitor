@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% from 'banner.html' import banner %}
+<body>
+{% block body %}
+    <main role="main" class="container">
+      {{ banner() }}
+
+      <div class="container-box">
+
+        <div id="update-timeout-modal">
+            <div class="schedule-box">
+                Set the time between the pings to the requests in the collection
+                <form id="update-timeout-form" method="post">
+                    <input type="hidden" name="timeout" id="update-timeout-timeout" />
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="update-timeout-info text-center">
+                                <span
+                                    class="update-timeout-label"
+                                    data-toggle="tooltip"
+                                    title="Expected time between pings.">
+                                    Period
+                                </span>
+                                <span
+                                    id="period-slider-value"
+                                    class="update-timeout-value">
+                                    1 day
+                                </span>
+                            </div>
+                            <div id="period-slider"></div>
+
+                            <div class="update-timeout-terms">
+                                <p>
+                                    <span>Period</span>
+                                    Expected time between pings.
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/checks.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/nouislider.min.js') }}"></script>
+
+{% endblock %}
+</body>

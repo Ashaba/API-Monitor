@@ -1,6 +1,7 @@
 .collection {
     display: flex;
     --side-bar-width: 30rem;
+    --error-color: red;
     border: 0.1rem solid var(--border-grey);
 }
 
@@ -193,4 +194,14 @@ h3.collectionName {
 .hint {
     padding-left: 1rem;
     font-size: 1.3rem;
+}
+
+.error {
+    border-color: var(--error-color);
+}
+
+#generalErrorMsg {
+    color: var(--error-color);
+    font-size: 1.4rem;
+    display: none;
 }

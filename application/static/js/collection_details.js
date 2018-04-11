@@ -121,6 +121,8 @@ $('.result__EditCheck').click(function(){
     $('a[href="#editor"]').addClass('active');
     $('#editor').parent().children('.tab-pane').removeClass('active');
     $('#editor').addClass('active');
+    location.href = '#editor';
+    console.log($(`#${$(this).parent().parent().parent().attr('data-context')}`))
     $(`#${$(this).parent().parent().parent().attr('data-context')}`).find('[name="url"]').focus();
 });
 
@@ -132,23 +134,56 @@ $('#runCollectionChecks').click(function(){
     $.get(url, function(data){
         $('.collectionHeader .fa-spinner').hide();
         runButton.css("pointer-events", "auto");
-        location.reload();
+        reloadPage();
     });
 });
 
 var saveButton = null
 $('#saveCollectionChecks').click(function(){
+    error_in_forms = false;
+    $('.serverReportedError').html('');
     saveButton = $(this);
-    $('.collectionHeader .fa-spinner').show();
-    saveButton.css("pointer-events", "none");
     var data = [];
     $('.form').each(function() {
         data.push(getFormData($(this)));
     });
-    postData(data, onSaveData);
+    if(error_in_forms == false) {
+        $('#generalErrorMsg').hide();
+        $('.collectionHeader .fa-spinner').show();
+        saveButton.css("pointer-events", "none");
+        postData(data, onSaveData);
+    } else {
+        $('#generalErrorMsg').show();
+    }
 });
 
 function onSaveData(data){
     $('.collectionHeader .fa-spinner').hide();
     saveButton.css("pointer-events", "auto");
+    if(data.errors.length == 0) {
+        reloadPage();
+    } else {
+        $.each(data.errors, function(index, error){
+            $(`#checksFormContainer div.check:nth-child(${error.checkIndex}) .serverReportedError`).html(error.message);
+            $(error.selector).addClass('error');
+        });
+    }
 }
+
+$(function(){
+    var hash = window.location.hash;
+    hash && $('nav:not(.requestAssertion) a[href="' + hash + '"]').tab('show');
+  
+    $('nav:not(.requestAssertion) a').click(function (e) {
+      $(this).tab('show');
+      var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+      window.location.hash = this.hash;
+      $('html,body').scrollTop(scrollmem);
+    });
+  });
+
+  function reloadPage() {
+    localStorage.setItem('current_url', $(location).attr('href'));
+    location.reload();
+    location.href = localStorage.getItem('current_url');
+  }

@@ -1,15 +1,15 @@
 $(function () {
-    
+
     var MINUTE = {name: "min", nsecs: 60};
     var HOUR = {name: "hour", nsecs: MINUTE.nsecs * 60};
     var DAY = {name: "day", nsecs: HOUR.nsecs * 24};
     var WEEK = {name: "week", nsecs: DAY.nsecs * 7};
     var UNITS = [WEEK, DAY, HOUR, MINUTE];
 
-    var secsToText = function(total) {
+    var secsToText = function (total) {
         var remainingSeconds = Math.floor(total);
         var result = "";
-        for (var i=0, unit; unit=UNITS[i]; i++) {
+        for (var i = 0, unit; unit = UNITS[i]; i++) {
             if (unit === WEEK && remainingSeconds % unit.nsecs != 0) {
                 // Say "8 days" instead of "1 week 1 day"
                 continue
@@ -48,12 +48,13 @@ $(function () {
             density: 4,
             format: {
                 to: secsToText,
-                from: function() {}
+                from: function () {
+                }
             }
         }
     });
 
-    periodSlider.noUiSlider.on("update", function(a, b, value) {
+    periodSlider.noUiSlider.on("update", function (a, b, value) {
         var rounded = Math.round(value);
         $("#period-slider-value").text(secsToText(rounded));
         $("#update-timeout-timeout").val(rounded);
@@ -61,7 +62,7 @@ $(function () {
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    $(".check-menu-remove").click(function() {
+    $(".check-menu-remove").click(function () {
         var $this = $(this);
 
         $("#remove-check-form").attr("action", $this.data("url"));
@@ -75,7 +76,7 @@ $(function () {
 
 $(".update-timeout-form").submit(updateScheduler);
 
-function updateScheduler (event) {
+function updateScheduler(event) {
     var form = $(this);
     var id = form.attr('id');
     console.log(id);
@@ -83,11 +84,10 @@ function updateScheduler (event) {
     var form_data = $(this).serializeArray();
     console.log(form_data);
     $.ajax({
-        type: 'PUT',
-        contentType: 'application/json',
+        type: 'POST',
         url: '/collection-details/' + id,
         data: form_data,
-        success: function(data) {
+        success: function (data) {
             console.log('Put was performed.');
         }
     });

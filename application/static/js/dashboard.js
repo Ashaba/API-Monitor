@@ -248,4 +248,5 @@ function isURL(str) {
     return urlregex.test(str);
 }
 
-$.each(context.checks, createCheck)
+$.each(context.checks, createCheck);
+

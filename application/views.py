@@ -72,7 +72,7 @@ def collections():
     return render_template('collections.html', context=context)
 
 
-@app_view.route('/collection-details/<collection_id>', methods=['GET', 'PUT'])
+@app_view.route('/collection-details/<collection_id>', methods=['GET', 'POST'])
 @authentication_required
 def collection_details(collection_id=None):
     context = {}
@@ -208,12 +208,12 @@ def update_collection_checks(collection_id=None):
             assertion.request_id = check.id
             assertion.save()
 
-    if request.method == 'PUT':
+    if request.method == 'POST':
         try:
             collection = Collection.get(collection_id)
-            payload = request.get_json()
+            payload = request.form["time"]
             print(payload)
-            collection.schedule = payload.get("time")
+            collection.schedule = payload
             collection.save()
         except Exception as e:
             print(e)

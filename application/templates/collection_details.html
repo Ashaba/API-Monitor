@@ -53,27 +53,23 @@
                         <div class="schedule-title">
                             Set the period between the pings to the requests in the collection
                         </div>
-                        <form class="update-timeout-form" method="put" action="" id="{{ context["collection"]['id'] }}">
+                        <form class="update-timeout-form" method="post" action="" id="context['collection']['id']">
                             <input type="hidden" name="time" id="update-timeout-timeout" />
-                            <div>
-                                <div>
-                                    <div class="update-timeout-info text-center">
-                                        <span
-                                            class="update-timeout-label"
-                                            data-toggle="tooltip"
-                                            title="Expected period between pings.">
-                                            Period:
-                                        </span>
-                                        <span
-                                            id="period-slider-value"
-                                            class="update-timeout-value">
-                                            1 day
-                                        </span>
-                                    </div>
-                                    <div id="period-slider"></div>
-                                </div>
-                                <button type="submit" class="btn btn-secondary btn-lg">Save</button>
+                            <div class="update-timeout-info text-center">
+                                <span
+                                    class="update-timeout-label"
+                                    data-toggle="tooltip"
+                                    title="Expected period between pings.">
+                                    Period:
+                                </span>
+                                <span
+                                    id="period-slider-value"
+                                    class="update-timeout-value">
+                                    1 day
+                                </span>
                             </div>
+                            <div id="period-slider"></div>
+                            <button type="submit" class="btn btn-secondary btn-lg">Save</button>
                         </form>
                     </div>
                 </div>

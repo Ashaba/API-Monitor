@@ -77,6 +77,7 @@ $(function () {
 $(".update-timeout-form").submit(updateScheduler);
 
 function updateScheduler(event) {
+    event.preventDefault();
     var form = $(this);
     var id = form.attr('id');
     console.log(id);
@@ -84,7 +85,7 @@ function updateScheduler(event) {
     var form_data = $(this).serializeArray();
     console.log(form_data);
     $.ajax({
-        type: 'POST',
+        type: 'PUT',
         url: '/collection-details/' + id,
         data: form_data,
         success: function (data) {

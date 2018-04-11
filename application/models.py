@@ -31,10 +31,10 @@ class Collection(Base):
 	name = db.Column(db.String(128), nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
 	team_id = db.Column(db.Integer, db.ForeignKey('Team.id'))
-	schedule = db.Column(db.Time)
 	response_summary = db.relationship(
 		'ResponseSummary', backref='collection', lazy=True
 	)
+	interval = db.Column(db.Integer)
 	requests = db.relationship('Request', backref='collection', cascade='all, delete-orphan')
 	
 	def __str__(self):

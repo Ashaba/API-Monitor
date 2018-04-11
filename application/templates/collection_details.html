@@ -53,7 +53,7 @@
                         <div class="schedule-title">
                             Set the period between the pings to the requests in the collection
                         </div>
-                        <form class="update-timeout-form" method="post" action="" id="context['collection']['id']">
+                        <form class="update-timeout-form" method="PUT" action="" id="{{ context['collection']['id'] }}">
                             <input type="hidden" name="time" id="update-timeout-timeout" />
                             <div class="update-timeout-info text-center">
                                 <span

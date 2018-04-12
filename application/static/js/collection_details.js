@@ -122,7 +122,6 @@ $('.result__EditCheck').click(function(){
     $('#editor').parent().children('.tab-pane').removeClass('active');
     $('#editor').addClass('active');
     location.href = '#editor';
-    console.log($(`#${$(this).parent().parent().parent().attr('data-context')}`))
     $(`#${$(this).parent().parent().parent().attr('data-context')}`).find('[name="url"]').focus();
 });
 

@@ -1,6 +1,6 @@
 from ..base import BaseTestCase, user_payload
 import json
-from application.models import db, Collection, Request, Team
+from application.models import db, Collection, Header, Request, RequestAssertion, Team
 from application.auth.models import User
 
 
@@ -179,3 +179,74 @@ class TestApplication(BaseTestCase):
 		self.assertTrue('checks' in self.get_context_variable('context'))
 		self.assertTrue('results' in self.get_context_variable('context'))
 		self.assertEqual(self.get_context_variable('context')['collection_name'], collection.name)
+
+	def test_post_check_with_duplicate_method_and_url(self):
+		self.client.post('/auth', data=json.dumps(user_payload), content_type='application/json')
+		collection = Collection(name='Test Collection', user_id=self.user.id)
+		collection.save()
+		request = Request(
+			collection_id=collection.id,
+			method='GET',
+			url='https://test.com',
+		)
+		request.save()
+		old_number_of_checks = len(collection.requests)
+		self.checks[0][''] = f"{request.id}"
+		self.checks[0]['method'] = 'GET'
+		self.checks[0]['url'] = 'https://test.com'
+		response = self.client.post(
+			f'/collection-details/{collection.id}/update',
+			data=json.dumps(self.checks), content_type='application/json')
+		self.assertEqual(response.status_code, 200)
+		new_number_of_checks = len(collection.requests)
+		self.assertEqual(old_number_of_checks, new_number_of_checks)
+		self.assertTrue((json.loads(response.data))['errors'])
+
+	def test_post_duplicate_header(self):
+		self.client.post('/auth', data=json.dumps(user_payload), content_type='application/json')
+		collection = Collection(name='Test Collection', user_id=self.user.id)
+		collection.save()
+		request = Request(
+			collection_id=collection.id,
+			method='GET',
+			url='https://lmap-staging-test.andela.com/api/v1/careers',
+		)
+		request.save()
+		header = Header(key="Token", value="someToken", request_id=request.id)
+		header.save()
+		old_number_of_headers = len(request.headers)
+		self.checks[0]['id'] = f"{request.id}"
+		response = self.client.post(
+			f'/collection-details/{collection.id}/update',
+			data=json.dumps(self.checks), content_type='application/json')
+		self.assertEqual(response.status_code, 200)
+		new_number_of_headers = len(request.headers)
+		self.assertEqual(old_number_of_headers, new_number_of_headers)
+		self.assertTrue((json.loads(response.data))['errors'])
+
+	def test_post_duplicate_assertion(self):
+		self.client.post('/auth', data=json.dumps(user_payload), content_type='application/json')
+		collection = Collection(name='Test Collection', user_id=self.user.id)
+		collection.save()
+		request = Request(
+			collection_id=collection.id,
+			method='GET',
+			url='https://lmap-staging-test.andela.com/api/v1/careers',
+		)
+		request.save()
+		assertion = RequestAssertion(
+			assertion_type='Status Code',
+			comparison='equal (number)',
+			value=200,
+			request_id=request.id
+		)
+		assertion.save()
+		old_number_of_assertions = len(request.assertions)
+		self.checks[0]['id'] = f"{request.id}"
+		response = self.client.post(
+			f'/collection-details/{collection.id}/update',
+			data=json.dumps(self.checks), content_type='application/json')
+		self.assertEqual(response.status_code, 200)
+		new_number_of_assertions = len(request.assertions)
+		self.assertEqual(old_number_of_assertions, new_number_of_assertions)
+		self.assertTrue((json.loads(response.data))['errors'])

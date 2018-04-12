@@ -202,6 +202,6 @@ h3.collectionName {
 
 #generalErrorMsg {
     color: var(--error-color);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     display: none;
 }

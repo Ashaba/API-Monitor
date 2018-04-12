@@ -147,6 +147,10 @@ body {
     width: 50rem;
 }
 
+.hidenIds {
+    display: none;
+}
+
 #header {
     display: none;
 }

@@ -18,7 +18,10 @@ var resultTemplate = `
         <span class="result__Method">GET/</span>
         <p class="result__AssertionsHeading">ASSERTIONS</p>
         <div class="result__Assertions"></div>
-        <div class="result_More"></div>
+        <div class="result_More">
+            <p class="result__Headers"></p>
+            <p class="result__Data"></p>
+        </div>
     </div>
 `,
 assertionTemplate = `
@@ -42,22 +45,28 @@ resultSummaryTemplate = `
     </div>
 </a>
 `;
-
-$.each(context.results, function(index, resultsSet) {
-    createResultSummary(index, resultsSet.summary);
-    $.each(resultsSet.results, function(index2, resultData) {
-        createResult(index, resultData);
+if(context.results.length == 0) {
+    $('<p class="hint">Run some checks. Their summaries will be listed here.</p>')
+        .insertAfter($('.checkList .navLinks').children('.checkList__Heading'));
+} else {
+    $.each(context.results, function(index, resultsSet) {
+        createResultSummary(index, resultsSet.summary);
+        $.each(resultsSet.results, function(index2, resultData) {
+            createResult(index, resultData);
+        });
     });
-});
+}
 
 function createResult(containerIndex, resultData) {
     var result = $($.trim(resultTemplate));
     result.attr('id', resultData.id);
-    result.attr('data-context', resultData.checkId);
+    result.attr('data-context', resultData.request_id);
     result.find('.result__Url').html(resultData.url);
-    result.find('.result__StatusCodeValue').html(resultData.statusCode);
-    result.find('.result__ResponseTimeValue').html(resultData.responseTime);
+    result.find('.result__StatusCodeValue').html(resultData.status_code);
+    result.find('.result__ResponseTimeValue').html(resultData.response_time + 'ms');
     result.find('.result__Method').html(resultData.method);
+    result.find('.result__Headers').html(`<b>Headers: </b> ${resultData.headers}`);
+    result.find('.result__Data').html(`<b>Data: </b> ${resultData.data}`);
     result.find('.result_Arrow').on('click', function() {
         var moreResults = result.find('.result_More');
         if (moreResults.is(':visible')) {
@@ -83,7 +92,7 @@ function createAssertion(result, assertionData) {
         assertion.find('.result__AssertionIcon').addClass('fa-times');
         falsy = 'not';
     }
-    assertion.find('.result__AssertionText').html(`${assertionData.type} - '${assertionData.received}' was ${falsy} ${assertionData.comparison} ${assertionData.expected}`);
+    assertion.find('.result__AssertionText').html(`${assertionData.assertion_type} - '${assertionData.received}' was ${falsy} ${assertionData.comparison} ${assertionData.value}`);
     
     assertion.appendTo(result.find('.result__Assertions'));
 }
@@ -98,12 +107,13 @@ function createResultSummary(index, resultSummaryData) {
     }
     resultSummary.find('.resultSummary__StatusText').html(resultSummaryData.status);
     resultSummary.find('.resultSummary_Failures').html(`${resultSummaryData.failures} failures`);
-    resultSummary.find('.resultSummary__Date').html(resultSummaryData.date);
-    resultSummary.find('.resultSummary__RunFrom').html(`via ${resultSummaryData.runFrom}`);
-    resultSummary.appendTo($('.checkList .navLinks'));
+    resultSummary.find('.resultSummary__Date').html(resultSummaryData.date_created);
+    resultSummary.find('.resultSummary__RunFrom').html(`via ${resultSummaryData.run_from}`);
+    resultSummary.insertAfter($('.checkList .navLinks').children('.checkList__Heading'));
 
     var fullResultsPane = $(`<div id="results${index}" class="tab-pane"></div>`);
     fullResultsPane.appendTo($('.resultsContainer'));
+
 }
 
 $('.result__EditCheck').click(function(){
@@ -113,3 +123,32 @@ $('.result__EditCheck').click(function(){
     $('#editor').addClass('active');
     $(`#${$(this).parent().parent().parent().attr('data-context')}`).find('[name="url"]').focus();
 });
+
+$('#runCollectionChecks').click(function(){
+    var runButton = $(this);
+    $('.collectionHeader .fa-spinner').show();
+    runButton.css("pointer-events", "none");
+    url = ($(location).attr('pathname')) + '/Dashboard/run-checks';
+    $.get(url, function(data){
+        $('.collectionHeader .fa-spinner').hide();
+        runButton.css("pointer-events", "auto");
+        location.reload();
+    });
+});
+
+var saveButton = null
+$('#saveCollectionChecks').click(function(){
+    saveButton = $(this);
+    $('.collectionHeader .fa-spinner').show();
+    saveButton.css("pointer-events", "none");
+    var data = [];
+    $('.form').each(function() {
+        data.push(getFormData($(this)));
+    });
+    postData(data, onSaveData);
+});
+
+function onSaveData(data){
+    $('.collectionHeader .fa-spinner').hide();
+    saveButton.css("pointer-events", "auto");
+}

@@ -15,23 +15,18 @@
                 
                 <hr>
                 <h4 class="checkList__Heading">Results</h4>
-                <a class="nav-link resultSummary" data-toggle="tab" href="#results" role="tab">
-                    <div class="resultSummary__StatusContainer">
-                        <div class="resultSummary__Status">
-                            <i class="fa fa-times resultSummary__StatusIcon"></i>
-                            <span class="resultSummary__StatusText">Failed</span>
-                        </div>
-                        <p class="resultSummary_Failures">2 failures</p>
-                    </div>
-                    <div class="resultSummary_briefDetails">
-                        <p class="resultSummary__Date">Mar 15 6:17pm</p>
-                        <p class="resultSummary__RunFrom">via Dashboard</p>
-                    </div>
-                </a>
                 </nav>
             </div>
             <div class="tab-content resultsContainer">
-                <h3 class="collectionName">Collection Name</h3>
+                <div class="collectionHeader">
+                    <span class="collectionName">{{context.collection_name}}</span>
+                    <span>
+                        <i class="fas fa-spinner fa-pulse"></i> &nbsp;
+                        <span id="runCollectionChecks">
+                            Run Checks &nbsp;<i class="fa fa-play"></i>
+                        </span>
+                    </span>
+                </div>
                 <div id="results" class="tab-pane active"></div>
                 <div id="editor" class="tab-pane">
                     <div id="checks">
@@ -40,12 +35,9 @@
                             <span class="title">CHECKS</span>
                             </div>
                             <div class="menu">
-                            <span id="submitForms">
-                                Save <img width="20px" height="20px" src="../static/images/ic_save_black.png" alt="Save changes"/>
-                            </span>
-                            <span id="runChecks">
-                                Run <img width="20px" height="20px" src="../static/images/ic_send_black.png" alt="Run checks"/>
-                            </span>
+                                <span id="saveCollectionChecks">
+                                    Save Checks <i class="fa fa-save"></i>
+                                </span>
                             </div>
                         </div>
                         <div id="checksFormContainer"></div>

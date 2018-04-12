@@ -2,11 +2,13 @@ const requestHeaderTemplate = `
     <div class="form-inline">
         <input name="headerKey" type="text" class="form-control" placeholder="KEY">
         <input name="headerValue" type="text" class="form-control" placeholder="VALUE">
+        <input name="headerId" type="text" class="hidenIds">
         <span class="removeHeader">&times;</span>
     </div>
 `,
     checkAssertionTemplate = `
     <div class="assertion">
+        <input name="assertionId" type="text" class="hidenIds">
         <select name="assertionSource" class="form-control assertion-value">
             <option value="Status Code">Status Code</option>
             <option value="Response Time (ms)">Response Time (ms)</option>
@@ -42,6 +44,7 @@ const requestHeaderTemplate = `
                             <option value="PUT">PUT</option>
                             <option value="DELETE">DELETE</option>
                         </select>
+                        <input name="id" type="text" class="hidenIds">
                         <input name="url" type="text" class="form-control url-input" placeholder="URL">
                     </div>
                     <span class="tab-pane-heading">HEADERS</span>
@@ -77,9 +80,11 @@ function getFormData(form) {
     const list_entries = {
         headerKeys: [],
         headerValues: [],
+        headerIds: [],
         assertionSources: [],
         assertionComparisons: [],
         assertionTargetValues: [],
+        assertionIds: [],
     };
 
     var headersAndAssertions = {
@@ -103,15 +108,17 @@ function getFormData(form) {
     $.each(list_entries.headerKeys, function(index, keyName) {
         headersAndAssertions.headers.push({
             key: keyName,
-            value: list_entries.headerValues[index]
+            value: list_entries.headerValues[index],
+            id: list_entries.headerIds[index]
         });
     });
 
     $.each(list_entries.assertionSources, function(index, sourceName) {
         headersAndAssertions.assertions.push({
-            source: sourceName,
+            assertion_type: sourceName,
             comparison: list_entries.assertionComparisons[index],
-            value: list_entries.assertionTargetValues[index]
+            value: list_entries.assertionTargetValues[index],
+            id: list_entries.assertionIds[index]
         });
     });
 
@@ -120,55 +127,25 @@ function getFormData(form) {
 }
 
 function postData(data, callback) {
+    url = ($(location).attr('pathname')) + '/update';
     var delay = 3000; //add a delay to simulate network request
     if (data.constructor === Array && data.length > 0) {
         // show the spinner when the request is initiated
         $('.loading-spinner').show();
         $.ajax({
-            url: '/dashboard',
+            url: url,
             type: 'POST',
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
-            success: callback,
-            complete: function(){
-                //add a delay
-                setTimeout(function() {
-                    // hide the spinner when the request completes
-                    $('.loading-spinner').hide();
-                    // empty the form fields
-                    $('.form').trigger('reset');
-                }, delay);
-            }
+            success: callback
         });
     } else {
         return false;
     }
 }
 
-function onPostData() {
-
-}
-
 $('#addCheck').on('click', function () {
     createCheck(-1, {})
-});
-
-$('#submitForms').on('click', function() {
-    var data = [];
-    $('.form').each(function() {
-        data.push(getFormData($(this)));
-    });
-    postData(data, onPostData);
-});
-
-$('#runChecks').on('click', function() {
-    var data = [];
-    $('.form').each(function() {
-        data.push(getFormData($(this)));
-    });
-    postData(data, onPostData);
-    console.log(data)
-    postData(data, onPostData)
 });
 
 if(typeof module !== 'undefined') {
@@ -208,6 +185,7 @@ function createCheck(index, checkData) {
 
     if($.isEmptyObject(checkData) == false) {
         check.find('[name="method"]').val(checkData.method);
+        check.find('[name="id"]').val(checkData.id);
         check.find('[name="url"]').val(checkData.url);
         if('headers' in checkData && checkData.headers.length > 0) {
             $.each(checkData.headers, function(index, headerData) {
@@ -231,6 +209,7 @@ function createHeader(check, headerData) {
     var header = $($.trim(requestHeaderTemplate));
     header.find('[name="headerKey"]').val(headerData.key);
     header.find('[name="headerValue"]').val(headerData.value);
+    header.find('[name="headerId"]').val(headerData.id);
     header.find('.removeHeader').click(function(){
         header.remove();
     });
@@ -240,9 +219,10 @@ function createHeader(check, headerData) {
 function createAnAssertion(check, assertionData) {
     var assertion = $($.trim(checkAssertionTemplate));
     if($.isEmptyObject(assertionData) == false){
-        assertion.find('[name="assertionSource"]').val(assertionData.type);
+        assertion.find('[name="assertionSource"]').val(assertionData.assertion_type);
         assertion.find('[name="assertionComparison"]').val(assertionData.comparison);
         assertion.find('[name="assertionTargetValue"]').val(assertionData.value);
+        assertion.find('[name="assertionId"]').val(assertionData.id);
     }
     assertion.find('.remove-assertion').click(function(){
         assertion.remove();

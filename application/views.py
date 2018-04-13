@@ -124,6 +124,7 @@ def collection_details(collection_id=None):
     context['collection_name'] = Collection.get(collection_id).name
     collection = Collection.get(collection_id)
     context["collection"] = collection.serialize()
+    context["title"] = "Collection"
     
     return render_template('collection_details.html', context=context)
 
@@ -212,14 +213,15 @@ def update_collection_checks(collection_id=None):
         try:
             collection = Collection.get(collection_id)
             payload = request.form["time"] # this is time in seconds
-            print(payload)
-            print(collection)
             collection.interval = payload
             collection.save()
         except Exception as e:
             print(e)
-    
-    return render_template('collection_details.html')
+    context = {}
+    collection = Collection.get(collection_id)
+    context["collection"] = collection.serialize()
+    context["title"] = "Collection Detail"
+    return render_template('collection_details.html', context=context)
 
 
 @app_view.route('/settings', methods=['GET'])

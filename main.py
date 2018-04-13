@@ -45,8 +45,8 @@ app = create_application(os.getenv("FLASK_CONFIG") or "development")
 def active_job():
     def run_job():
         while True:
-            time.sleep(3)
-            collection_scheduler()
+            time.sleep(10)
+            collection_scheduler(app.app_context())
     thread = threading.Thread(target=run_job)
     thread.start()
     
@@ -55,8 +55,8 @@ def start_runner():
     def start_loop():
         while True:
             logging.info('In start loop')
-            # collection_scheduler()
-            time.sleep(3)
+            collection_scheduler(app.app_context())
+            time.sleep(10)
 
     logging.info('Started runner')
     thread = threading.Thread(target=start_loop)

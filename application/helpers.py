@@ -5,10 +5,12 @@ from application.models import Request, Response, ResponseSummary, ResponseAsser
 from application.models import Request, Collection
 
 
-def collection_scheduler():
-	collections = Collection.fetch_all()
-	for collection in collections:
-		run_collection_checks(collection.id)
+def collection_scheduler(app_context):
+	with app_context:
+		collections = Collection.fetch_all()
+		for collection in collections:
+			if collection.interval:
+				run_collection_checks(collection.id, collection.interval)
 
 
 def valid_url(url):

@@ -145,7 +145,8 @@ function postData(data, callback) {
 }
 
 $('#addCheck').on('click', function () {
-    createCheck(-1, {})
+    createCheck(-1, {});
+    trackFormChanges();
 });
 
 if(typeof module !== 'undefined') {
@@ -176,10 +177,12 @@ function createCheck(index, checkData) {
     var headersContainer = check.find('#headers');
     check.find('.addHeader').click(function() {
         createHeader(check, {});
+        trackFormChanges();
     })
 
     check.find('.addAssertion').click(function() {
         createAnAssertion(check, {});
+        trackFormChanges();
     })
     checkId++;
 
@@ -230,4 +233,57 @@ function createAnAssertion(check, assertionData) {
     assertion.appendTo(check.find('.assertions'));
 }
 
-$.each(context.checks, createCheck)
+if (context.checks.length > 0) {
+    $.each(context.checks, createCheck);
+} else {
+    // $('#runCollectionChecks').css("pointer-events", "none");
+    // $('#runCollectionChecks').prop("disabled", true);
+    toggleButtonState($('#runCollectionChecks'));
+}
+
+function trackFormChanges() {
+    $(':text').keypress(function(e) {
+        // enableSaveBtn();
+        toggleButtonState($('#saveCollectionChecks'));
+    });
+    
+    $(':text').keyup(function(e) {
+        if (e.keyCode == 8 || e.keyCode == 46) {
+            // enableSaveBtn();
+            toggleButtonState($('#saveCollectionChecks'));
+        } else {
+            e.preventDefault();
+        }
+    });
+    $(':text').bind('paste', function(e) {
+        // enableSaveBtn();
+        toggleButtonState($('#saveCollectionChecks'));
+    });
+    
+    $('select').change(function(e) {
+        // enableSaveBtn();
+        toggleButtonState($('#saveCollectionChecks'));
+    });
+}
+
+$('#saveCollectionChecks').prop('disabled', true);
+trackFormChanges()
+// function enableSaveBtn() {
+//     $('#saveCollectionChecks').css("pointer-events", "auto");
+//     $('#saveCollectionChecks').prop('disabled', false);
+// }
+
+// function disableSaveBtn() {
+//     $('#saveCollectionChecks').css("pointer-events", "none");
+//     $('#saveCollectionChecks').prop('disabled', false);
+// }
+
+function toggleButtonState(button) {
+    if ($(button).prop('disabled') == true) {
+        $(button).prop('disabled', false);
+        $(button).css('pointer-events', 'none');
+    } else {
+        $(button).prop('disabled', true);
+        $(button).css('pointer-events', 'auto');
+    }
+}

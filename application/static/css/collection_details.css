@@ -98,11 +98,15 @@ h3.collectionName {
 
 #runCollectionChecks, #saveCollectionChecks {
     font-size: 1.3rem;
-    border: #83878c 0.1rem solid;
+    /* border: #83878c 0.1rem solid; */
     padding: 0.5rem 1rem;
-    color: #414244;
+    /* color: #414244; */
     border-radius: 0.4rem;
     display: inline-block;
+}
+
+#saveCollectionChecks {
+    pointer-events: none;
 }
 
 #runCollectionChecks:hover, #saveCollectionChecks:hover {

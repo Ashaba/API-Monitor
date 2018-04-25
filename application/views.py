@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, request, jsonify
+import logging
 
 from application.auth.helpers import (current_user, authentication_required)
 from application.models import Team, Collection, RequestAssertion, ResponseSummary, Request, Header
 from application.helpers import run_collection_checks
 
 app_view = Blueprint('app_view', __name__, template_folder='templates')
+
+logger = logging.getLogger(__name__)
 
 
 @app_view.route('/dashboard', methods=['POST', 'GET'])
@@ -98,6 +101,16 @@ def collection_details(collection_id=None):
 
     response_summaries = ResponseSummary.filter_by(collection_id=collection_id)
     results = []
+    
+    if request.method == 'PUT':
+        try:
+            collection = Collection.get(collection_id)
+            payload = request.form["time"] # this is time in seconds
+            collection.interval = payload
+            collection.save()
+        except Exception as e:
+            logger.error(e)
+
     for response_summary in response_summaries:
         responseSet = {}
         summary = response_summary.serialize()
@@ -209,14 +222,6 @@ def update_collection_checks(collection_id=None):
             assertion.request_id = check.id
             assertion.save()
 
-    if request.method == 'POST':
-        try:
-            collection = Collection.get(collection_id)
-            payload = request.form["time"] # this is time in seconds
-            collection.interval = payload
-            collection.save()
-        except Exception as e:
-            print(e)
     context = {}
     collection = Collection.get(collection_id)
     context["collection"] = collection.serialize()

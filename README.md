@@ -39,6 +39,12 @@
  
  ```$ python manage.py db upgrade```
  
+ # Celery and Background Tasks
+ - Start the celery beat
+ ```celery beat -A celery_worker.celery --loglevel=info```
+  - Start the celery worker
+ ```celery worker -A celery_worker.celery --loglevel=info```
+ 
  
  # Running the application
  `$ flask run`

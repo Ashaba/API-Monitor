@@ -28,7 +28,7 @@ def valid_url(url):
 	
 
 def run_collection_checks(collection_id, run_from):
-	print("Running checks now..................", collection_id)
+	print("Running checks now..................2", collection_id)
 	# checks = Request.filter_by(collection_id=collection_id)
 	# response_summary = ResponseSummary(
 	# 	status='success',

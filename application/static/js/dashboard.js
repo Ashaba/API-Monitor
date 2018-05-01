@@ -92,7 +92,7 @@ function getFormData(form) {
     var headersAndAssertions = {
         headers: [],
         assertions: []
-    }
+    };
 
     form.find('[name]').each(function (index1, value1) {
         var field = $(this),
@@ -125,6 +125,7 @@ function getFormData(form) {
             id: list_entries.headerIds[index]
         });
     });
+
 
     $.each(list_entries.assertionSources, function(index, sourceName) {
         headersAndAssertions.assertions.push({
@@ -189,11 +190,11 @@ function createCheck(index, checkData) {
     var headersContainer = check.find('#headers');
     check.find('.addHeader').click(function() {
         createHeader(check, {});
-    })
+    });
 
     check.find('.addAssertion').click(function() {
         createAnAssertion(check, {});
-    })
+    });
     checkId++;
 
     if($.isEmptyObject(checkData) == false) {

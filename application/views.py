@@ -17,6 +17,7 @@ def dashboard():
     context["title"] = "Dashboard"
     if request.method == 'POST':
         payload = request.get_json()
+        
         def handle_request(n):
             if n < 1:
                 return "no data"
@@ -221,12 +222,15 @@ def update_collection_checks(collection_id=None):
             assertion.value = _assertion['value']
             assertion.request_id = check.id
             assertion.save()
-
-    context = {}
-    collection = Collection.get(collection_id)
-    context["collection"] = collection.serialize()
-    context["title"] = "Collection Detail"
-    return render_template('collection_details.html', context=context)
+    response = jsonify(dict(
+        errors=errors
+    ))
+    return response
+    # context = {}
+    # collection = Collection.get(collection_id)
+    # context["collection"] = collection.serialize()
+    # context["title"] = "Collection Detail"
+    # return render_template('collection_details.html', context=context)
 
 
 @app_view.route('/settings', methods=['GET'])

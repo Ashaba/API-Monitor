@@ -11,7 +11,7 @@ secret_key = os.urandom(24)
 celery_get_request_schedule = {
         'schedule-name': {
             'task': 'application.monitoring_tasks.periodic_monitoring_checks',
-            'schedule': timedelta(seconds=30),
+            'schedule': timedelta(seconds=300),
         },
     }
 

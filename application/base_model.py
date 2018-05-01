@@ -1,7 +1,10 @@
+import logging
 from sqlalchemy.sql import func
 from sqlalchemy.exc import SQLAlchemyError
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
+
+logger = logging.getLogger(__name__)
 
 
 class Base(db.Model):
@@ -31,6 +34,7 @@ class Base(db.Model):
             return True
         except SQLAlchemyError as e:
             db.session.rollback()
+            logger.error("database operation error: ", e)
             return False
 
     def __repr__(self):

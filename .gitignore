@@ -17,6 +17,7 @@ __pycache__/
 celery-worker.db
 celerybeat-schedule.db
 celerybeat.pid
+dump.rdb
 
 # Distribution / packaging
 .Python

@@ -31,7 +31,7 @@ def monitoring_checks():
         scheduled_collections = [y for y in collections if y.interval]
         for collection in scheduled_collections:
             time.sleep(collection.interval)
-            run_collection_checks(collection.id, collection.interval)
+            run_collection_checks(collection.id, "Terminal")
     except Exception as e:
         logger.error(e)
 
@@ -42,6 +42,6 @@ def async_monitoring_checks():
     return
 
 
-@periodic_task(run_every=timedelta(seconds=60))
+@periodic_task(run_every=timedelta(seconds=0))
 def periodic_monitoring_checks():
     return monitoring_checks()

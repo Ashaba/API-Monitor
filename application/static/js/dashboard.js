@@ -29,10 +29,11 @@ const requestHeaderTemplate = `
         <span class="removeCheck">
             <i class="fas fa-times"></i>
         </span>
-        <nav class="nav" role="tablist">
+        <nav class="nav requestAssertion" role="tablist">
             <a class="nav-link active" data-toggle="tab" href="#request" role="tab">Request</a>
             <a class="nav-link" data-toggle="tab" href="#assertions" role="tab">Assertions</a>
         </nav>
+        <span class="serverReportedError"></span>
         <form class="form">
             <div class="tab-content">
                 <div class="tab-pane active" id="request" role="tabpanel">
@@ -65,6 +66,7 @@ const requestHeaderTemplate = `
         </form>
     </div>
 `;
+var error_in_forms = false;
 
 var checkId = 0;
 
@@ -97,11 +99,22 @@ function getFormData(form) {
             name = field.attr('name'),
             value = field.val(),
             plural_name = name + 's';
-        
-        if (plural_name in list_entries) {
-            list_entries[plural_name].push(value);
+        if (field.hasClass('hidenIds') == false && value == "") {
+            error_in_forms = true;
+            field.addClass('error');
         } else {
-            data[name] = value;
+            field.removeClass('error');
+            if (name == 'url') {
+                if(isURL(value) == false) {
+                    field.addClass('error');
+                    error_in_forms = true;
+                }
+            }
+            if (plural_name in list_entries) {
+                list_entries[plural_name].push(value);
+            } else {
+                data[name] = value;
+            }
         }
     });
 
@@ -228,6 +241,11 @@ function createAnAssertion(check, assertionData) {
         assertion.remove();
     });
     assertion.appendTo(check.find('.assertions'));
+}
+
+function isURL(str) {
+    var urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+    return urlregex.test(str);
 }
 
 $.each(context.checks, createCheck)

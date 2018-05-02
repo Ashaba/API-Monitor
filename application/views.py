@@ -141,9 +141,23 @@ def collection_checks(collection_id=None, run_from='Schedule'):
 @authentication_required
 def update_collection_checks(collection_id=None):
     checks = request.get_json()
+    errors = []
+    checkIndex = 0
     for _check in checks:
+        checkIndex += 1
+        error = dict(
+            checkIndex=checkIndex
+        )
         if _check['id'] == '':
-            check = Request()
+            check = Request.filter_by(
+                url=_check['url'], method=_check['method'], collection_id=collection_id).first()
+            if check is None:
+                check = Request()
+            else:
+                error['message'] = 'Duplicate url'
+                error['selector'] = '#checksFormContainer div.check:nth-child(' + str(checkIndex) + ') [name="url"]'
+                errors.append(error)
+                continue
         else:
             check = Request.get(_check['id'])
         check.method = _check['method']
@@ -151,18 +165,40 @@ def update_collection_checks(collection_id=None):
         check.collection_id = collection_id
         check.save()
 
+        header_index = 0
         for _header in _check['headers']:
+            header_index += 1
             if _header['id'] == '':
-                header = Header()
+                header = Header.filter_by(
+                    key=_header['key'], request_id=check.id).first()
+                if header is None:
+                    header = Header()
+                else:
+                    error['message'] = 'Duplicate header key'
+                    error['selector'] = '#' + str(check.id) + '.check .headers div:nth-child(' + str(header_index) + ') [name="headerKey"]'
+                    errors.append(error)
+                    continue
             else:
                 header = Header.get(_header['id'])
             header.key = _header['key']
             header.value = _header['value']
             header.request_id = check.id
             header.save()
+        assertion_index = 1
         for _assertion in _check['assertions']:
+            assertion_index += 1
             if _assertion['id'] == '':
-                assertion = RequestAssertion()
+                assertion = RequestAssertion.filter_by(
+                    assertion_type=_assertion['assertion_type'],
+                    comparison=_assertion['comparison'],
+                    request_id=check.id).first()
+                if assertion is None:
+                    assertion = RequestAssertion()
+                else:
+                    error['message'] = 'Duplicate assertion',
+                    error['selector'] = '#' + str(check.id) + '.check .assertions div:nth-child(' + str(assertion_index) + ') [name="assertionSource"]'
+                    errors.append(error)
+                    continue
             else:
                 assertion = RequestAssertion.get(_assertion['id'])
             assertion.assertion_type = _assertion['assertion_type']
@@ -170,4 +206,7 @@ def update_collection_checks(collection_id=None):
             assertion.value = _assertion['value']
             assertion.request_id = check.id
             assertion.save()
-    return "success"
+    response = jsonify(dict(
+        errors=errors
+    ))
+    return response

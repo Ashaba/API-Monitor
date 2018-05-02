@@ -119,6 +119,16 @@ body {
     cursor: pointer;
 }
 
+.check .nav.requestAssertion {
+    display: inline-flex;
+}
+
+.check .serverReportedError {
+    color: var(--error-color);
+    font-size: 1.1rem;
+    margin-left: 10rem;
+}
+
 .check .nav-link {
     font-size: 1.4rem;
 }

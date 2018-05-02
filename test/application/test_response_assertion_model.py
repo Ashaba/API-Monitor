@@ -1,4 +1,4 @@
-from ..base import BaseTestCase
+from test.base import BaseTestCase
 from application.models import ResponseAssertion
 
 

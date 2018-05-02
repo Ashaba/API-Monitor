@@ -7,6 +7,15 @@ from application.base_model import db
 from application.models import Collection, Team, Request, Response, team_members
 from application.auth.models import User
 from main import create_application
+import os
+
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Shell
+
+from application.base_model import db
+from application.models import Collection, Team, Request, Response, team_members
+from application.auth.models import User
+from main import create_application
 
 environment = os.getenv("FLASK_CONFIG")
 app = create_application(environment)

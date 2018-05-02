@@ -1,4 +1,4 @@
-from ..base import BaseTestCase, db
+from test.base import BaseTestCase
 from application.models import Team
 from application.auth.models import User
 

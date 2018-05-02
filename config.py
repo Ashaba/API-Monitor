@@ -1,10 +1,19 @@
 import os
 from os.path import dirname, join
 from dotenv import load_dotenv
+from datetime import timedelta
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 secret_key = os.urandom(24)
+
+# Create Celery beat schedule:
+celery_get_request_schedule = {
+        'schedule-name': {
+            'task': 'application.monitoring_tasks.periodic_monitoring_checks',
+            'schedule': timedelta(seconds=300),
+        },
+    }
 
 
 class Config(object):
@@ -25,6 +34,11 @@ class Config(object):
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    CELERYBEAT_SCHEDULE = celery_get_request_schedule
+    CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+    CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
+    CELERY_IMPORTS = ("application.monitoring_tasks",)
+    REDIS_URL = os.environ.get('REDIS_URL')
 
 
 class ConfigWithCustomDBEngineParams(Config):
@@ -45,12 +59,20 @@ class DevelopmentConfiguration(ConfigWithCustomDBEngineParams):
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    REDIS_HOST = 'localhost'
+    REDIS_PASSWORD = ''
+    REDIS_PORT = 6379
+    REDIS_URL = 'redis://localhost:6379/0'
+
 
 class TestingConfiguration(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + Config.BASE_DIR \
                               + "/test/test_db.sqlite"
     PAGE_LIMIT = 2
+    REDIS_URL = 'redis://localhost:6379/0'
 
 
 app_configuration = {

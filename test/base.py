@@ -1,6 +1,6 @@
 from flask_testing import TestCase
 
-from application.models import db
+from application.base_model import db
 from main import create_application
 
 user_payload = {
@@ -11,7 +11,6 @@ user_payload = {
 
 
 class BaseTestCase(TestCase):
-
     def create_app(self):
         self.app = create_application('testing')
         self.app_context = self.app.app_context()

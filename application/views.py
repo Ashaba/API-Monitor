@@ -1,12 +1,13 @@
-from datetime import datetime
-
 from flask import Blueprint, render_template, request, jsonify
+import logging
 
 from application.auth.helpers import (current_user, authentication_required)
-from application.models import Team, Collection, RequestAssertion, ResponseAssertion, ResponseSummary, Request, Header
+from application.models import Team, Collection, RequestAssertion, ResponseSummary, Request, Header
 from application.helpers import run_collection_checks
 
 app_view = Blueprint('app_view', __name__, template_folder='templates')
+
+logger = logging.getLogger(__name__)
 
 
 @app_view.route('/dashboard', methods=['POST', 'GET'])
@@ -16,6 +17,7 @@ def dashboard():
     context["title"] = "Dashboard"
     if request.method == 'POST':
         payload = request.get_json()
+        
         def handle_request(n):
             if n < 1:
                 return "no data"
@@ -74,7 +76,7 @@ def collections():
     return render_template('collections.html', context=context)
 
 
-@app_view.route('/collection-details/<collection_id>', methods=['GET'])
+@app_view.route('/collection-details/<collection_id>', methods=['GET', 'PUT'])
 @authentication_required
 def collection_details(collection_id=None):
     context = {}
@@ -100,6 +102,16 @@ def collection_details(collection_id=None):
 
     response_summaries = ResponseSummary.filter_by(collection_id=collection_id)
     results = []
+    
+    if request.method == 'PUT':
+        try:
+            collection = Collection.get(collection_id)
+            payload = request.form["time"] # this is time in seconds
+            collection.interval = payload
+            collection.save()
+        except Exception as e:
+            logger.error(e)
+
     for response_summary in response_summaries:
         responseSet = {}
         summary = response_summary.serialize()
@@ -124,6 +136,10 @@ def collection_details(collection_id=None):
         results.append(responseSet)
     context['results'] = results
     context['collection_name'] = Collection.get(collection_id).name
+    collection = Collection.get(collection_id)
+    context["collection"] = collection.serialize()
+    context["title"] = "Collection"
+    
     return render_template('collection_details.html', context=context)
 
 
@@ -210,3 +226,17 @@ def update_collection_checks(collection_id=None):
         errors=errors
     ))
     return response
+    # context = {}
+    # collection = Collection.get(collection_id)
+    # context["collection"] = collection.serialize()
+    # context["title"] = "Collection Detail"
+    # return render_template('collection_details.html', context=context)
+
+
+@app_view.route('/settings', methods=['GET'])
+@authentication_required
+def settings():
+    context = dict()
+    context["title"] = "Settings"
+
+    return render_template("settings.html", context=context)

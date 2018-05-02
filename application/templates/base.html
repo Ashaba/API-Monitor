@@ -27,6 +27,11 @@
     <link href="{{ url_for('static', filename = "css/offcanvas.css") }}" rel="stylesheet">
     <link href="{{ url_for('static', filename = "css/main.css") }}" rel="stylesheet">
     <link href="{{ url_for('static', filename = "css/collection_details.css") }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename = "css/nouislider.min.css") }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = "css/nouislider.pips.css") }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = "css/scheduler.css") }}" rel="stylesheet">
+
     <!-- <link href="../static/css/main.css" rel="stylesheet"> -->
     <script src="{{ url_for('static', filename = "js/jquery-3.3.1.min.js") }}" ></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -53,7 +58,7 @@
             <a class="nav-link" href="{{ url_for('app_view.team') }}">Team</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link" href="#" id="dropdown01">Settings</a>
+            <a class="nav-link" href="{{ url_for('app_view.settings') }}" id="dropdown01">Settings</a>
           </li>
         </ul>
           {% if session.name %}

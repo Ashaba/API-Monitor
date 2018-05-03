@@ -1,7 +1,7 @@
 import os
 import redis
 from test.base import BaseTestCase
-from application.monitoring_tasks import monitoring_checks
+from application.monitoring_tasks import monitoring_checks, async_monitoring_checks
 
 
 class TestMonitoring(BaseTestCase):
@@ -13,4 +13,6 @@ class TestMonitoring(BaseTestCase):
 	def test_monitoring_checks_with_no_data(self):
 		monitoring = monitoring_checks()
 		self.assertIsNone(monitoring)
-
+		
+	def test_async_monitoring(self):
+		pass

@@ -28,12 +28,15 @@ class Config(object):
     SECRET_KEY = os.getenv('SECRET_KEY', secret_key)
 
     # email server
-    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_SERVER = 'smtp.sendgrid.net'
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME = "Ashaba"
+    # MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = "jash?10friday"
+    # MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    
     CELERYBEAT_SCHEDULE = celery_get_request_schedule
     CELERY_BROKER_URL = os.environ.get('REDIS_URL')
     CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')

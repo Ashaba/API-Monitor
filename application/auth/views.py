@@ -1,7 +1,10 @@
+import logging
 from flask import Blueprint, render_template, jsonify, session, request
 from application.auth.helpers import (update_user)
 
 auth = Blueprint('auth', __name__, template_folder='templates')
+
+logger = logging.getLogger(__name__)
 
 
 @auth.route('/')

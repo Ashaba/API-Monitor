@@ -15,3 +15,7 @@ class TestHelpers(BaseTestCase):
 	def test_make_request(self):
 		req = make_request("http://test.com", "GET")
 		self.assertIsInstance(req, Response)
+		
+	def test_make_request_invalid_url(self):
+		req = make_request("test.com", "GET")
+		self.assertEqual(req, None)

@@ -1,8 +1,15 @@
 import requests
 import json
 import re
+import logging
+from flask import current_app
+from flask_mail import Mail, Message
 from application.models import Response, ResponseSummary, ResponseAssertion
-from application.models import Request
+from application.models import Request, Collection, Team
+from application.auth.models import User
+
+
+logger = logging.getLogger(__name__)
 
 
 def valid_url(url):
@@ -25,6 +32,7 @@ def run_collection_checks(collection_id, run_from):
 		run_from=run_from,
 		collection_id=collection_id
 	)
+	collection_status = "success"
 	for req in request_check:
 		headers = {}
 		for header in req.headers:
@@ -34,28 +42,46 @@ def run_collection_checks(collection_id, run_from):
 		response.response_summary_id = response_summary.id
 		
 		failures, status = test_assertions(response, req)
-
+		if status == "success":
+			collection_status = "success"
+		else:
+			collection_status = "failed"
 		response_summary.failures = failures
 		response_summary.status = status
 		response_summary.responses.append(response)
+	if collection_status == "failed":
+		mail = Mail(current_app)
+		collection = Collection.get(collection_id)
+		team = Team.get(collection.team_id)
+		user = User.get(team.user_id)
+		msg = Message(
+			"Failed check: "+collection.name, sender="john.ashabahebwa@andela.com", recipients=[user.email],
+			body=collection.name+" Has failing checks")
+		Message()
+		mail.send(msg)
+		
 	response_summary.save()
 
 
 def make_request(url, method, headers=None):
-	request = requests.get(url, headers=headers, verify=False)
 	try:
-		response_object = request.json()
-	except Exception:
-		response_object = request.content.decode("utf-8")
-	
-	response = Response(
-		status_code=request.status_code,
-		response_time=int(request.elapsed.total_seconds()),
-		headers=json.dumps(dict(request.headers)),
-		data=response_object,
-	)
+		request = requests.get(url, headers=headers, verify=False)
+		try:
+			response_object = request.json()
+		except Exception:
+			response_object = request.content.decode("utf-8")
+		
+		response = Response(
+			status_code=request.status_code,
+			response_time=int(request.elapsed.total_seconds()),
+			headers=json.dumps(dict(request.headers)),
+			data=response_object,
+		)
+		return response
 
-	return response
+	except Exception as e:
+		logger.error(e)
+		return None
 
 
 def test_assertions(response, req):

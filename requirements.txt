@@ -56,7 +56,7 @@ PyYAML==3.12
 query-string==0.0.28
 redis==2.10.6
 requests==2.18.4
-rsa==3.4.2
+rsa==4.7
 schedule==0.5.0
 six==1.11.0
 SQLAlchemy==1.2.2
